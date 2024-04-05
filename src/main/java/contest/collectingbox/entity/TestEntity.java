@@ -11,5 +11,4 @@ import lombok.Setter;
 public class TestEntity{
     @Id @GeneratedValue
     private Long id;
-
 }
