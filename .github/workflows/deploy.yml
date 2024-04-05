@@ -36,12 +36,12 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://collecting-box-deploy/$GITHUB_SHA.zip
+      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://collecting-box-dev/$GITHUB_SHA.zip
 
     - name: Code deploy
       run: |
         aws deploy create-deployment \
         --deployment-config-name CodeDeployDefault.AllAtOnce \
-        --application-name collecting-box-code-deploy \
+        --application-name collecting-box-deploy \
         --deployment-group-name collecting-box-server \
-        --s3-location bucket=collecting-box-deploy,bundleType=zip,key=$GITHUB_SHA.zip
+        --s3-location bucket=collecting-box-dev,bundleType=zip,key=$GITHUB_SHA.zip
