@@ -13,8 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 class CollectingBoxApplicationTests {
+    
     @Autowired
     EntityManager em;
+    
     @Test
     void test(){
         TestEntity testEntity = new TestEntity();
@@ -26,7 +28,5 @@ class CollectingBoxApplicationTests {
         TestEntity result = query.selectFrom(qTestEntity).fetchOne();
 
         Assertions.assertThat(result).isEqualTo(testEntity);
-
     }
-
 }
