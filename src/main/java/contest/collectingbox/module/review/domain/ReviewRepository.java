@@ -1,2 +1,6 @@
-package contest.collectingbox.module.review.domain;public interface ReviewRepository {
+package contest.collectingbox.module.review.domain;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ReviewRepository extends JpaRepository<Review, Long> {
 }
