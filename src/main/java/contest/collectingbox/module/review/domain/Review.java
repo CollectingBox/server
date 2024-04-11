@@ -2,26 +2,34 @@ package contest.collectingbox.module.review.domain;
 
 import contest.collectingbox.global.common.BaseTimeEntity;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static lombok.AccessLevel.*;
-
 @Entity
 @Getter
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="collecting_box_id")
-    @NotNull
-    private CollectingBox collectingBox;
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private Type type;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "collecting_box_id")
+    private CollectingBox collectingBox;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Tag tag;
 }

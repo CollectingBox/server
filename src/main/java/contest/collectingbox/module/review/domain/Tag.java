@@ -5,8 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Type {
+public enum Tag {
+
     EXIST("존재함"),
     DISAPPEAR("사라짐");
-    private final String discription;
+
+    private final String content;
 }
