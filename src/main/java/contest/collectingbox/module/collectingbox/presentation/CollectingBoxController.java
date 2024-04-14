@@ -20,8 +20,8 @@ public class CollectingBoxController {
 
     @GetMapping
     public List<CollectingBoxResponse> findCollectingBoxesWithinArea(@RequestParam Double latitude,
-                                                           @RequestParam Double longitude,
-                                                           @RequestParam List<Tag> tags) {
+                                                                     @RequestParam Double longitude,
+                                                                     @RequestParam List<Tag> tags) {
         return collectingBoxService.findCollectingBoxesWithinArea(latitude, longitude, tags);
     }
 }

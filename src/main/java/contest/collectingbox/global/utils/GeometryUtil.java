@@ -12,7 +12,6 @@ public class GeometryUtil {
 
     private static final int SRID = 4326;
 
-
     public static Point toPoint(double longitude, double latitude) {
         GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), SRID);
         return geometryFactory.createPoint(new Coordinate(longitude, latitude));
