@@ -11,6 +11,6 @@ public class Address {
     private String sido;
     private String sigungu;
     private String dong;
-    private String rodeName;
+    private String roadName;
     private String streetNum;
 }
