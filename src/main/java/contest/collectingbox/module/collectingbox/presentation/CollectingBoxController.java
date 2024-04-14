@@ -19,9 +19,9 @@ public class CollectingBoxController {
     private final CollectingBoxService collectingBoxService;
 
     @GetMapping
-    public List<CollectingBoxResponse> findCollectingBoxes(@RequestParam Double latitude,
+    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(@RequestParam Double latitude,
                                                            @RequestParam Double longitude,
                                                            @RequestParam List<Tag> tags) {
-        return collectingBoxService.findCollectingBoxes(latitude, longitude, tags);
+        return collectingBoxService.findCollectingBoxesWithinArea(latitude, longitude, tags);
     }
 }

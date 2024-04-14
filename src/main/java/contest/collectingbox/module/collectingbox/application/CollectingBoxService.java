@@ -28,7 +28,7 @@ public class CollectingBoxService {
     private int radius;
 
     @Transactional(readOnly = true)
-    public List<CollectingBoxResponse> findCollectingBoxes(Double latitude,
+    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(Double latitude,
                                                            Double longitude,
                                                            List<Tag> tags) {
         GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), srid);
