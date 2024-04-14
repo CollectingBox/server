@@ -23,4 +23,12 @@ public class Location extends BaseTimeEntity {
 
     @Embedded
     private Address address;
+
+    public double latitude() {
+        return point.getY();
+    }
+
+    public double longitude() {
+        return point.getX();
+    }
 }
