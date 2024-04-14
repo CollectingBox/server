@@ -1,5 +1,6 @@
 package contest.collectingbox.module.collectingbox.application;
 
+import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
@@ -31,8 +32,7 @@ public class CollectingBoxService {
     public List<CollectingBoxResponse> findCollectingBoxesWithinArea(Double latitude,
                                                            Double longitude,
                                                            List<Tag> tags) {
-        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), srid);
-        Point center = geometryFactory.createPoint(new Coordinate(longitude, latitude));
+        Point center = GeometryUtil.toPoint(srid, longitude, latitude);
 
         return collectingBoxRepository.findAllWithinArea(center, radius, tags)
                 .stream()
