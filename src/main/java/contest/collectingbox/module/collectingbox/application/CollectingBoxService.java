@@ -19,9 +19,6 @@ public class CollectingBoxService {
 
     private final CollectingBoxRepository collectingBoxRepository;
 
-    @Value("${spatial.reference.id}")
-    private int srid;
-
     @Value("${collecting-box.search.radius.meter}")
     private int radius;
 
@@ -29,7 +26,7 @@ public class CollectingBoxService {
     public List<CollectingBoxResponse> findCollectingBoxesWithinArea(Double latitude,
                                                                      Double longitude,
                                                                      List<Tag> tags) {
-        Point center = GeometryUtil.toPoint(srid, longitude, latitude);
+        Point center = GeometryUtil.toPoint(longitude, latitude);
 
         return collectingBoxRepository.findAllWithinArea(center, radius, tags)
                 .stream()
