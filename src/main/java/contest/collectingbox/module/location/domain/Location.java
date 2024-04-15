@@ -1,19 +1,14 @@
 package contest.collectingbox.module.location.domain;
 
 import contest.collectingbox.global.common.BaseTimeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import java.math.BigDecimal;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import org.locationtech.jts.geom.Point;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Location extends BaseTimeEntity {
 
@@ -23,12 +18,17 @@ public class Location extends BaseTimeEntity {
 
     private String name;
 
-    @Column(nullable = false)
-    private BigDecimal latitude;
-
-    @Column(nullable = false)
-    private BigDecimal longitude;
+    @Column(columnDefinition = "point SRID 4326")
+    private Point point;
 
     @Embedded
     private Address address;
+
+    public double latitude() {
+        return point.getY();
+    }
+
+    public double longitude() {
+        return point.getX();
+    }
 }
