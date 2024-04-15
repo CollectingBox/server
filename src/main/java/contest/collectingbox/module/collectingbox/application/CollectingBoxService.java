@@ -33,4 +33,13 @@ public class CollectingBoxService {
                 .map(CollectingBoxResponse::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    public List<CollectingBoxResponse> searchCollectingBoxes(String query, List<Tag> tags) {
+        query = query.trim();
+        query = query.replaceFirst(" ", "%");
+        return collectingBoxRepository.findAllByKeyword(String.format("%%%s%%", query), tags)
+                .stream()
+                .map(CollectingBoxResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
 }
