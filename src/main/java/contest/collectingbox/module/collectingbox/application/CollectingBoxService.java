@@ -3,6 +3,7 @@ package contest.collectingbox.module.collectingbox.application;
 import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
@@ -32,5 +33,10 @@ public class CollectingBoxService {
                 .stream()
                 .map(CollectingBoxResponse::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public CollectingBoxDetailResponse findBoxDetailById(Long collectionId) {
+        return collectingBoxRepository.findDetailById(collectionId);
     }
 }
