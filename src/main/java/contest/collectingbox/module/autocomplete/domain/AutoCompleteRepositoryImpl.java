@@ -7,7 +7,7 @@ import contest.collectingbox.module.location.domain.QLocation;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 
-public class AutoCompleteRepositoryImpl implements AutoCompleteRepositoryCustom{
+public class AutoCompleteRepositoryImpl implements AutoCompleteRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
