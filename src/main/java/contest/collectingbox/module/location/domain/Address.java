@@ -2,10 +2,13 @@ package contest.collectingbox.module.location.domain;
 
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Address {
 
     private String sido;
@@ -13,4 +16,10 @@ public class Address {
     private String dong;
     private String roadName;
     private String streetNum;
+
+
+    public Address(String sigungu, String dong) {
+        this.sigungu = sigungu;
+        this.dong = dong;
+    }
 }
