@@ -24,4 +24,10 @@ public class CollectingBoxController {
                                                                      @RequestParam List<Tag> tags) {
         return collectingBoxService.findCollectingBoxesWithinArea(latitude, longitude, tags);
     }
+
+    @GetMapping("/search")
+    public List<CollectingBoxResponse> searchCollectingBoxes(@RequestParam String query,
+                                                             @RequestParam List<Tag> tags) {
+        return collectingBoxService.searchCollectingBoxes(query, tags);
+    }
 }
