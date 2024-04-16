@@ -2,9 +2,8 @@ package contest.collectingbox.module.collectingbox.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import contest.collectingbox.module.collectingbox.domain.Tag;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,14 +29,9 @@ public class CollectingBoxDetailResponse {
     }
 
     private String formatDate(String inputDate) {
-        SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-        SimpleDateFormat output = new SimpleDateFormat("yyyy.MM.dd");
-        try {
-            Date date = input.parse(inputDate);
-            return output.format(date);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
+        LocalDateTime dateTime = LocalDateTime.parse(inputDate,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS"));
+        return dateTime.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
     }
 
 }
