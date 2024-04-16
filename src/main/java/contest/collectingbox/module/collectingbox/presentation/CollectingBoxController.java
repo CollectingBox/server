@@ -22,10 +22,16 @@ public class CollectingBoxController {
     private final CollectingBoxService collectingBoxService;
 
     @GetMapping
-    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(@RequestParam Double latitude,
-                                                                     @RequestParam Double longitude,
-                                                                     @RequestParam List<Tag> tags) {
-        return collectingBoxService.findCollectingBoxesWithinArea(latitude, longitude, tags);
+    public ApiResponse<List<CollectingBoxResponse>> findCollectingBoxesWithinArea(@RequestParam Double latitude,
+                                                                                  @RequestParam Double longitude,
+                                                                                  @RequestParam List<Tag> tags) {
+        return ApiResponse.ok(collectingBoxService.findCollectingBoxesWithinArea(latitude, longitude, tags));
+    }
+
+    @GetMapping("/search")
+    public ApiResponse<List<CollectingBoxResponse>> searchCollectingBoxes(@RequestParam String query,
+                                                                          @RequestParam List<Tag> tags) {
+        return ApiResponse.ok(collectingBoxService.searchCollectingBoxes(query, tags));
     }
 
     @GetMapping("/{collectionId}")

@@ -10,9 +10,19 @@ import java.util.List;
 public interface CollectingBoxRepository extends JpaRepository<CollectingBox, Long>, CollectingBoxRepositoryCustom {
 
     @Query("select c from CollectingBox c join c.location l " +
-            "where function('st_contains', function('st_buffer', :center, :radius), l.point) " +
-            "and c.tag in :tags")
+            "where function('st_contains', function('st_buffer', :center, :radius), l.point) and " +
+            "c.tag in :tags")
     List<CollectingBox> findAllWithinArea(@Param("center") Point center,
                                           @Param("radius") int radius,
                                           @Param("tags") List<Tag> tags);
+
+
+    @Query("select c from CollectingBox c join c.location l " +
+            "where (l.address.sigungu like :keyword or " +
+            "l.address.dong like :keyword or " +
+            "l.address.roadName like :keyword or " +
+            "l.address.streetNum like :keyword) and " +
+            "c.tag in :tags")
+    List<CollectingBox> findAllByKeyword(@Param("keyword") String keyword,
+                                         @Param("tags") List<Tag> tags);
 }
