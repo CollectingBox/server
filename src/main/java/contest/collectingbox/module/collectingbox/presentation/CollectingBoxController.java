@@ -1,5 +1,6 @@
 package contest.collectingbox.module.collectingbox.presentation;
 
+import contest.collectingbox.global.common.ApiResponse;
 import contest.collectingbox.module.collectingbox.application.CollectingBoxService;
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
@@ -19,15 +20,15 @@ public class CollectingBoxController {
     private final CollectingBoxService collectingBoxService;
 
     @GetMapping
-    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(@RequestParam Double latitude,
-                                                                     @RequestParam Double longitude,
-                                                                     @RequestParam List<Tag> tags) {
-        return collectingBoxService.findCollectingBoxesWithinArea(latitude, longitude, tags);
+    public ApiResponse<List<CollectingBoxResponse>> findCollectingBoxesWithinArea(@RequestParam Double latitude,
+                                                                                  @RequestParam Double longitude,
+                                                                                  @RequestParam List<Tag> tags) {
+        return ApiResponse.ok(collectingBoxService.findCollectingBoxesWithinArea(latitude, longitude, tags));
     }
 
     @GetMapping("/search")
-    public List<CollectingBoxResponse> searchCollectingBoxes(@RequestParam String query,
-                                                             @RequestParam List<Tag> tags) {
-        return collectingBoxService.searchCollectingBoxes(query, tags);
+    public ApiResponse<List<CollectingBoxResponse>> searchCollectingBoxes(@RequestParam String query,
+                                                                          @RequestParam List<Tag> tags) {
+        return ApiResponse.ok(collectingBoxService.searchCollectingBoxes(query, tags));
     }
 }
