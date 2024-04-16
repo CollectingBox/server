@@ -3,13 +3,13 @@ package contest.collectingbox.module.autocomplete.application;
 import contest.collectingbox.module.autocomplete.domain.AutoCompleteRepository;
 import contest.collectingbox.module.autocomplete.dto.AddressDto;
 import contest.collectingbox.module.autocomplete.dto.AutoCompleteResponseDto;
-import contest.collectingbox.module.location.domain.Location;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
