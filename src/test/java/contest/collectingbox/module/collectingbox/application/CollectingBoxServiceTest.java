@@ -4,9 +4,9 @@ import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
 import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import contest.collectingbox.module.location.domain.Location;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static contest.collectingbox.module.collectingbox.domain.Tag.CLOTHES;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,6 +66,27 @@ class CollectingBoxServiceTest {
                 collectingBoxService.findCollectingBoxesWithinArea(latitude, longitude, tags);
 
         // then
-        Assertions.assertThat(result.get(0).getId()).isEqualTo(box.getId());
+        assertThat(result.get(0).getId()).isEqualTo(box.getId());
+    }
+
+    @Test
+    @DisplayName("수거함 id로 수거함 상세 정보 조회")
+    void findBoxDetail_Success_ById() {
+        // given
+        Long collectionId = 1L;
+        CollectingBoxDetailResponse expectedResponse = CollectingBoxDetailResponse.builder()
+                .roadName("roadName")
+                .streetNumber("streetNumber")
+                .modifiedDate("2024-04-12 00:00:00.000000")
+                .tag("tag")
+                .build();
+
+        // when
+        when(collectingBoxRepository.findDetailById(collectionId)).thenReturn(expectedResponse);
+        CollectingBoxDetailResponse response = collectingBoxService.findBoxDetailById(collectionId);
+
+        // then
+        assertThat(response).isEqualTo(expectedResponse);
+        assertThat(response.getLocation()).isNull();
     }
 }

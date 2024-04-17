@@ -1,5 +1,6 @@
 package contest.collectingbox.module.collectingbox.domain;
 
+import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,4 +15,12 @@ public enum Tag {
     TRASH("쓰레기통");
 
     private final String label;
+
+    public static String of(final String text) {
+        Tag tag = Arrays.stream(values())
+                .filter(val -> val.name().equals(text))
+                .findFirst()
+                .orElse(null);
+        return tag != null ? tag.getLabel() : null;
+    }
 }

@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface CollectingBoxRepository extends JpaRepository<CollectingBox, Long> {
+public interface CollectingBoxRepository extends JpaRepository<CollectingBox, Long>, CollectingBoxRepositoryCustom {
 
     @Query("select c from CollectingBox c join c.location l " +
             "where function('st_contains', function('st_buffer', :center, :radius), l.point) and " +
