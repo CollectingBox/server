@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ReviewRequest {
-    @Schema(description = "리뷰 내용", example = "EXIST")
+    @Schema(description = "리뷰 내용", example = "EXIST", allowableValues = {"EXIST", "DISAPPEAR"})
     private String content;
 
     public Review toEntity(CollectingBox collectingBox) {
