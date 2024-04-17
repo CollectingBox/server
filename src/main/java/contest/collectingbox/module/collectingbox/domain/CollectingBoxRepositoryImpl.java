@@ -37,6 +37,7 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
                 .from(review)
                 .where(review.collectingBox.id.eq(id))
                 .orderBy(review.createdAt.desc())
+                .limit(10)
                 .fetch();
 
         response.setReviews(reviews);
