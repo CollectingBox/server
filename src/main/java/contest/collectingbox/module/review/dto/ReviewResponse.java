@@ -3,19 +3,18 @@ package contest.collectingbox.module.review.dto;
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
 public class ReviewResponse {
-    private String status;
+    private String content;
     private String createdDate;
 
     @QueryProjection
-    public ReviewResponse(String status, String createdDate) {
-        this.status = status;
+    public ReviewResponse(String content, String createdDate) {
+        this.content = content;
         this.createdDate = formatDate(createdDate);
     }
 
