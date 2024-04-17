@@ -34,6 +34,7 @@ public class CollectingBoxService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<CollectingBoxResponse> searchCollectingBoxes(String query, List<Tag> tags) {
         query = query.trim();
         query = query.replaceFirst(" ", "%");
