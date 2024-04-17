@@ -29,7 +29,7 @@ class AutoCompleteServiceTest {
         String keyword = "상";
         // mock
         given(autoCompleteRepository.findAutoComplete(keyword)).willReturn(
-                List.of(new AddressDto("강동", "상일"), new AddressDto("노원", "상계")));
+                List.of(new AddressDto("강동구", "상일동"), new AddressDto("노원구", "상계동")));
 
         // when
         AutoCompleteResponseDto response = autoCompleteService.getAutoComplete(keyword);
