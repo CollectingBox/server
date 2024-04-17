@@ -2,6 +2,7 @@ name: Build with Gradle
 
 on:
   pull_request:
+    types: [opened, synchronize]
     branches: [ "main" ]
 
 jobs:
