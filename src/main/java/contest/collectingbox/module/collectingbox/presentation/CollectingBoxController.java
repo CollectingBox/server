@@ -44,6 +44,7 @@ public class CollectingBoxController {
         return ApiResponse.ok(collectingBoxService.searchCollectingBoxes(query, tags));
     }
 
+    @Operation(summary = "수거함 상세정보 조회", description = "수거함 ID별 수거함 상세정보를 조회합니다.")
     @GetMapping("/{collectionId}")
     public ApiResponse<CollectingBoxDetailResponse> findBoxDetailById(@PathVariable Long collectionId) {
         CollectingBoxDetailResponse response = collectingBoxService.findBoxDetailById(collectionId);
