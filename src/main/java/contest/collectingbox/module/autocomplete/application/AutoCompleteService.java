@@ -27,6 +27,6 @@ public class AutoCompleteService {
     }
 
     private String formatAddress(AddressDto address) {
-        return address.getSigungu() + "구 " + address.getDong() + "동";
+        return address.getSigungu() + " " + address.getDong();
     }
 }
