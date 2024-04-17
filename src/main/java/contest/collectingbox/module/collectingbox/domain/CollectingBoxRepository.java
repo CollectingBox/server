@@ -17,12 +17,17 @@ public interface CollectingBoxRepository extends JpaRepository<CollectingBox, Lo
                                           @Param("tags") List<Tag> tags);
 
 
-    @Query("select c from CollectingBox c join c.location l " +
-            "where (l.address.sigungu like :keyword or " +
-            "l.address.dong like :keyword or " +
-            "l.address.roadName like :keyword or " +
-            "l.address.streetNum like :keyword) and " +
-            "c.tag in :tags")
+    @Query(value = "select c.* from collecting_box as c " +
+            "join location as l on c.location_id = l.id " +
+            "where match (l.dong) against (:dong in natural language mode) and " +
+            "c.tag in (:tags)", nativeQuery = true)
+    List<CollectingBox> findAllByDong(@Param("dong") String dong,
+                                      @Param("tags") List<String> tags);
+
+    @Query(value = "select c.* from collecting_box as c " +
+            "join location as l on c.location_id = l.id " +
+            "where match(l.sigungu) against (:keyword in natural language mode) and " +
+            "c.tag in (:tags)", nativeQuery = true)
     List<CollectingBox> findAllByKeyword(@Param("keyword") String keyword,
-                                         @Param("tags") List<Tag> tags);
+                                         @Param("tags") List<String> tags);
 }

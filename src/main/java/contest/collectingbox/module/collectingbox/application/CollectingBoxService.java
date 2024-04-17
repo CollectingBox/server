@@ -5,6 +5,7 @@ import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
+import contest.collectingbox.module.location.domain.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class CollectingBoxService {
 
     private final CollectingBoxRepository collectingBoxRepository;
+    private final LocationRepository locationRepository;
 
     @Value("${collecting-box.search.radius.meter}")
     private int radius;
@@ -39,12 +41,21 @@ public class CollectingBoxService {
     public CollectingBoxDetailResponse findBoxDetailById(Long collectionId) {
         return collectingBoxRepository.findDetailById(collectionId);
     }
-  
+
     @Transactional(readOnly = true)
     public List<CollectingBoxResponse> searchCollectingBoxes(String query, List<Tag> tags) {
-        query = query.trim();
-        query = query.replaceFirst(" ", "%");
-        return collectingBoxRepository.findAllByKeyword(String.format("%%%s%%", query), tags)
+        List<String> tagStrings = tags.stream().map(Enum::name).collect(Collectors.toList());
+
+        String dong = locationRepository.findDongByKeyword(query);
+
+        if (dong == null) {
+            return collectingBoxRepository.findAllByKeyword(query, tagStrings)
+                    .stream()
+                    .map(CollectingBoxResponse::fromEntity)
+                    .collect(Collectors.toList());
+        }
+
+        return collectingBoxRepository.findAllByDong(dong, tagStrings)
                 .stream()
                 .map(CollectingBoxResponse::fromEntity)
                 .collect(Collectors.toList());
