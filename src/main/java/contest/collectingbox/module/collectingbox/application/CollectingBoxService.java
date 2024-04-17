@@ -39,7 +39,8 @@ public class CollectingBoxService {
     public CollectingBoxDetailResponse findBoxDetailById(Long collectionId) {
         return collectingBoxRepository.findDetailById(collectionId);
     }
-    
+  
+    @Transactional(readOnly = true)
     public List<CollectingBoxResponse> searchCollectingBoxes(String query, List<Tag> tags) {
         query = query.trim();
         query = query.replaceFirst(" ", "%");
