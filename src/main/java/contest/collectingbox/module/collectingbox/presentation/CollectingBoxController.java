@@ -21,13 +21,10 @@ public class CollectingBoxController {
     private final CollectingBoxService collectingBoxService;
 
     @Operation(summary = "수거함 목록 조회", description = "위도와 경도를 기준으로 200m 반경에 위치한 수거함 목록을 조회합니다.")
-    @ApiResponses(value = {
-//            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "BAD_REQUEST")
-    })
     @GetMapping
-    public ApiResponse<List<CollectingBoxResponse>> findCollectingBoxesWithinArea(@RequestParam Double latitude,
-                                                                                  @RequestParam Double longitude,
-                                                                                  @RequestParam List<Tag> tags) {
+    public ApiResponse<List<CollectingBoxResponse>> findCollectingBoxesWithinArea(@RequestParam final Double latitude,
+                                                                                  @RequestParam final Double longitude,
+                                                                                  @RequestParam final List<Tag> tags) {
         return ApiResponse.ok(collectingBoxService.findCollectingBoxesWithinArea(latitude, longitude, tags));
     }
 
