@@ -47,7 +47,7 @@ public class CollectingBoxService {
         String dong = locationRepository.findDongByKeyword(query);
 
         if (dong == null) {
-            return collectingBoxRepository.findAllByKeyword(query, toString(tags))
+            return collectingBoxRepository.findAllBySigungu(query, toString(tags))
                     .stream()
                     .map(CollectingBoxResponse::fromEntity)
                     .collect(Collectors.toList());
