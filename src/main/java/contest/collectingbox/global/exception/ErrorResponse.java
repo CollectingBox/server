@@ -9,10 +9,14 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ErrorResponse {
 
-    private HttpStatus httpStatus;
+    private HttpStatus status;
     private String message;
 
     public static ErrorResponse from(ErrorCode errorCode) {
         return new ErrorResponse(errorCode.getHttpStatus(), errorCode.getMessage());
+    }
+
+    public static ErrorResponse from(ErrorCode errorCode, String message){
+        return new ErrorResponse(errorCode.getHttpStatus(), message);
     }
 }

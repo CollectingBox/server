@@ -1,5 +1,8 @@
 package contest.collectingbox.module.review.application;
 
+import static contest.collectingbox.global.exception.ErrorCode.NOT_FOUND_COLLECTING_BOX;
+
+import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
 import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
 import contest.collectingbox.module.review.domain.ReviewRepository;
@@ -17,7 +20,7 @@ public class ReviewService {
 
     public Long postReview(ReviewRequest dto, Long collectionId) {
         CollectingBox box = collectingBoxRepository.findById(collectionId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 수거함이 없습니다."));
+                .orElseThrow(() -> new CollectingBoxException(NOT_FOUND_COLLECTING_BOX));
         return reviewRepository.save(dto.toEntity(box)).getId();
     }
 }
