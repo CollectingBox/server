@@ -1,5 +1,7 @@
 package contest.collectingbox.module.collectingbox.application;
 
+import contest.collectingbox.global.exception.CollectingBoxException;
+import contest.collectingbox.global.exception.ErrorCode;
 import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
@@ -29,6 +31,10 @@ public class CollectingBoxService {
     public List<CollectingBoxResponse> findCollectingBoxesWithinArea(final Double latitude,
                                                                      final Double longitude,
                                                                      final List<Tag> tags) {
+        if (tags.isEmpty()) {
+            throw new CollectingBoxException(ErrorCode.NOT_SELECTED_TAG);
+        }
+
         Point center = GeometryUtil.toPoint(longitude, latitude);
 
         return collectingBoxRepository.findAllWithinArea(center, radius, tags)
