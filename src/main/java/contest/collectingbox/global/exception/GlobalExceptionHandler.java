@@ -6,7 +6,9 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import static contest.collectingbox.global.exception.ErrorCode.MISMATCH_REQUEST_PARAM;
 import static contest.collectingbox.global.exception.ErrorCode.MISSING_REQUEST_PARAM;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -26,5 +28,12 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleMissingParams(MissingServletRequestParameterException e) {
         log.error("exception message = {}", e.getMessage());
         return ErrorResponse.from(MISSING_REQUEST_PARAM);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(BAD_REQUEST)
+    public ErrorResponse handleMissingParams(MethodArgumentTypeMismatchException e) {
+        log.error("exception message = {}", e.getMessage());
+        return ErrorResponse.from(MISMATCH_REQUEST_PARAM);
     }
 }
