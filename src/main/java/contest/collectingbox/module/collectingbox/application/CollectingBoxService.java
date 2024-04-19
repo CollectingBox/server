@@ -1,5 +1,7 @@
 package contest.collectingbox.module.collectingbox.application;
 
+import contest.collectingbox.global.exception.CollectingBoxException;
+import contest.collectingbox.global.exception.ErrorCode;
 import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
@@ -44,6 +46,10 @@ public class CollectingBoxService {
 
     @Transactional(readOnly = true)
     public List<CollectingBoxResponse> searchCollectingBoxes(final String query, final List<Tag> tags) {
+        if (tags.isEmpty()) {
+            throw new CollectingBoxException(ErrorCode.NOT_SELECTED_TAG);
+        }
+
         String dong = locationRepository.findDongByKeyword(query);
 
         if (dong == null) {
