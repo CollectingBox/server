@@ -20,7 +20,7 @@ public enum Tag {
         Tag tag = Arrays.stream(values())
                 .filter(val -> val.name().equals(text))
                 .findFirst()
-                .orElse(null);
-        return tag != null ? tag.getLabel() : null;
+                .orElseThrow(IllegalArgumentException::new);
+        return tag.getLabel();
     }
 }
