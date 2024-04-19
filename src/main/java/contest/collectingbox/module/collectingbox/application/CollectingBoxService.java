@@ -1,6 +1,11 @@
 package contest.collectingbox.module.collectingbox.application;
 
+import static contest.collectingbox.global.exception.ErrorCode.*;
+
+import contest.collectingbox.global.exception.CollectingBoxException;
+import contest.collectingbox.global.exception.ErrorCode;
 import contest.collectingbox.global.utils.GeometryUtil;
+import contest.collectingbox.module.collectingbox.domain.CollectingBox;
 import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
@@ -39,7 +44,10 @@ public class CollectingBoxService {
 
     @Transactional(readOnly = true)
     public CollectingBoxDetailResponse findBoxDetailById(Long collectionId) {
-        return collectingBoxRepository.findDetailById(collectionId);
+        CollectingBox box = collectingBoxRepository.findById(collectionId)
+                .orElseThrow(() -> new CollectingBoxException(
+                        NOT_FOUND_COLLECTING_BOX));
+        return collectingBoxRepository.findDetailById(box.getId());
     }
 
     @Transactional(readOnly = true)
