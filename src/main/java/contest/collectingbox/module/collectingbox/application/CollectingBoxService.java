@@ -43,21 +43,23 @@ public class CollectingBoxService {
     }
 
     @Transactional(readOnly = true)
-    public List<CollectingBoxResponse> searchCollectingBoxes(String query, List<Tag> tags) {
-        List<String> tagStrings = tags.stream().map(Enum::name).collect(Collectors.toList());
-
+    public List<CollectingBoxResponse> searchCollectingBoxes(final String query, final List<Tag> tags) {
         String dong = locationRepository.findDongByKeyword(query);
 
         if (dong == null) {
-            return collectingBoxRepository.findAllByKeyword(query, tagStrings)
+            return collectingBoxRepository.findAllByKeyword(query, toString(tags))
                     .stream()
                     .map(CollectingBoxResponse::fromEntity)
                     .collect(Collectors.toList());
         }
 
-        return collectingBoxRepository.findAllByDong(dong, tagStrings)
+        return collectingBoxRepository.findAllByDong(dong, toString(tags))
                 .stream()
                 .map(CollectingBoxResponse::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    private List<String> toString(List<Tag> tags) {
+        return tags.stream().map(Enum::name).collect(Collectors.toList());
     }
 }

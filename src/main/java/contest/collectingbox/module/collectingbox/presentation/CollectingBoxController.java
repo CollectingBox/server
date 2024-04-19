@@ -33,8 +33,8 @@ public class CollectingBoxController {
 
     @Operation(summary = "지역별 수거함 검색", description = "구/동 단위로 검색한 주소에 위치한 수거함 목록을 조회합니다.")
     @GetMapping("/search")
-    public ApiResponse<List<CollectingBoxResponse>> searchCollectingBoxes(@RequestParam String query,
-                                                                          @RequestParam List<Tag> tags) {
+    public ApiResponse<List<CollectingBoxResponse>> searchCollectingBoxes(@RequestParam final String query,
+                                                                          @RequestParam final List<Tag> tags) {
         return ApiResponse.ok(collectingBoxService.searchCollectingBoxes(query, tags));
     }
 
