@@ -1,7 +1,7 @@
 package contest.collectingbox.module.collectingbox.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import contest.collectingbox.global.common.CommonUtils;
+import contest.collectingbox.global.common.DateUtils;
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.review.dto.ReviewResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,7 +35,7 @@ public class CollectingBoxDetailResponse {
         this.location = location;
         this.roadName = roadName;
         this.streetNumber = streetNumber;
-        this.modifiedDate = CommonUtils.formatDate(modifiedDate);
+        this.modifiedDate = DateUtils.formatDate(modifiedDate);
         this.tag = Tag.of(tag);
     }
 

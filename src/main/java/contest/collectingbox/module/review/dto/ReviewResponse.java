@@ -1,7 +1,7 @@
 package contest.collectingbox.module.review.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import contest.collectingbox.global.common.CommonUtils;
+import contest.collectingbox.global.common.DateUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class ReviewResponse {
     @QueryProjection
     public ReviewResponse(String content, String createdDate) {
         this.content = content;
-        this.createdDate = CommonUtils.formatDate(createdDate);
+        this.createdDate = DateUtils.formatDate(createdDate);
     }
 
 }

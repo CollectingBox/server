@@ -1,15 +1,14 @@
 package contest.collectingbox.global.common;
 
-import static contest.collectingbox.global.exception.ErrorCode.NOT_FOUND_COLLECTING_BOX;
-
-import contest.collectingbox.global.exception.CollectingBoxException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class CommonUtils {
+@UtilityClass
+public class DateUtils {
     public static String formatDate(String inputDate) {
         try{
             LocalDateTime dateTime = LocalDateTime.parse(inputDate,
