@@ -28,9 +28,13 @@ public class CollectingBoxService {
     private int radius;
 
     @Transactional(readOnly = true)
-    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(Double latitude,
-                                                                     Double longitude,
-                                                                     List<Tag> tags) {
+    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(final Double latitude,
+                                                                     final Double longitude,
+                                                                     final List<Tag> tags) {
+        if (tags.isEmpty()) {
+            throw new CollectingBoxException(ErrorCode.NOT_SELECTED_TAG);
+        }
+
         Point center = GeometryUtil.toPoint(longitude, latitude);
 
         return collectingBoxRepository.findAllWithinArea(center, radius, tags)
