@@ -1,8 +1,9 @@
 package contest.collectingbox.global.exception;
 
+import static contest.collectingbox.global.exception.ErrorCode.INVALID_BEAN;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -20,23 +21,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> methodValidException(MethodArgumentNotValidException e) {
-        ErrorResponse errorResponse = makeValidErrorResponse(e.getBindingResult());
+        String message = e.getBindingResult().getFieldError().getDefaultMessage();
+        log.error("exception message = {}", e.getMessage());
+        ErrorResponse errorResponse = ErrorResponse.from(INVALID_BEAN, message);
         return ResponseEntity.status(errorResponse.getStatus()).body(errorResponse);
 
-    }
-
-    private ErrorResponse makeValidErrorResponse(BindingResult bindingResult) {
-        ErrorCode errorCode = null;
-        String message = bindingResult.getFieldError().getDefaultMessage();
-        if (bindingResult.hasErrors()) {
-            String bindResultCode = bindingResult.getFieldError().getCode();
-            switch (bindResultCode) {
-                case "NotNull":
-                    errorCode = ErrorCode.NOT_EMPTY_VALUE;
-                    break;
-            }
-        }
-        return ErrorResponse.from(errorCode, message);
     }
 
 }
