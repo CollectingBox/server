@@ -79,7 +79,7 @@ class CollectingBoxServiceTest {
                 .roadName("roadName")
                 .streetNumber("streetNumber")
                 .modifiedDate("2024-04-12 00:00:00.000000")
-                .tag("CLOTHES")
+                .tag(CLOTHES)
                 .build();
         CollectingBox box = CollectingBox.builder().id(collectionId).build();
 

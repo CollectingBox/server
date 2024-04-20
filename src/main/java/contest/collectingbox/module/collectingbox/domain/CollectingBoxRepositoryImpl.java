@@ -25,7 +25,7 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
         CollectingBoxDetailResponse response = queryFactory.select(new QCollectingBoxDetailResponse(
                         location.name, location.address.roadName,
                         location.address.streetNum,
-                        collectingBox.updatedAt.stringValue(), collectingBox.tag.stringValue()
+                        collectingBox.updatedAt.stringValue(), collectingBox.tag
                 ))
                 .from(collectingBox)
                 .join(collectingBox.location, location)

@@ -31,12 +31,12 @@ public class CollectingBoxDetailResponse {
     @QueryProjection
     @Builder
     public CollectingBoxDetailResponse(String location, String roadName, String streetNumber, String modifiedDate,
-                                       String tag) {
+                                       Tag tag) {
         this.location = location;
         this.roadName = roadName;
         this.streetNumber = streetNumber;
         this.modifiedDate = DateUtils.formatDate(modifiedDate);
-        this.tag = Tag.of(tag);
+        this.tag = tag.getLabel();
     }
 
 }
