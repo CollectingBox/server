@@ -26,8 +26,8 @@ public interface CollectingBoxRepository extends JpaRepository<CollectingBox, Lo
 
     @Query(value = "select c.* from collecting_box as c " +
             "join location as l on c.location_id = l.id " +
-            "where match(l.sigungu) against (:keyword in natural language mode) and " +
+            "where match(l.sigungu) against (:sigungu in natural language mode) and " +
             "c.tag in (:tags)", nativeQuery = true)
-    List<CollectingBox> findAllByKeyword(@Param("keyword") String keyword,
+    List<CollectingBox> findAllBySigungu(@Param("sigungu") String sigungu,
                                          @Param("tags") List<String> tags);
 }
