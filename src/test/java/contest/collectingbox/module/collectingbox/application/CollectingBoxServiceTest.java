@@ -7,6 +7,7 @@ import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import contest.collectingbox.module.location.domain.Location;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,10 +79,12 @@ class CollectingBoxServiceTest {
                 .roadName("roadName")
                 .streetNumber("streetNumber")
                 .modifiedDate("2024-04-12 00:00:00.000000")
-                .tag("tag")
+                .tag(CLOTHES)
                 .build();
+        CollectingBox box = CollectingBox.builder().id(collectionId).build();
 
         // when
+        when(collectingBoxRepository.findById(collectionId)).thenReturn(Optional.ofNullable(box));
         when(collectingBoxRepository.findDetailById(collectionId)).thenReturn(expectedResponse);
         CollectingBoxDetailResponse response = collectingBoxService.findBoxDetailById(collectionId);
 
