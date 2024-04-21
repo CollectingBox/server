@@ -7,11 +7,14 @@ import org.springframework.http.HttpStatus;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
     // 400
     NOT_SELECTED_TAG(BAD_REQUEST, "수거함 태그는 반드시 한 개 이상 설정해야 합니다."),
+    INVALID_REVIEW_CONTENT(BAD_REQUEST, "올바르지 않는 리뷰 내용입니다."),
+    INVALID_BEAN(BAD_REQUEST, "유효하지 않은 데이터입니다."),
     MISSING_REQUEST_PARAM(BAD_REQUEST, "필수 요청 파라미터가 존재하지 않습니다."),
     MISMATCH_REQUEST_PARAM(BAD_REQUEST, "요청 파라미터가 유효하지 않습니다."),
 
