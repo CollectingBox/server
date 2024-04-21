@@ -13,7 +13,7 @@ public enum ErrorCode {
     // 400
     NOT_SELECTED_TAG(BAD_REQUEST, "수거함 태그는 반드시 한 개 이상 설정해야 합니다."),
     MISSING_REQUEST_PARAM(BAD_REQUEST, "필수 요청 파라미터가 존재하지 않습니다."),
-    MISMATCH_REQUEST_PARAM(BAD_REQUEST, "요청 파라미터가 유효하지 않습니다.");
+    MISMATCH_REQUEST_PARAM(BAD_REQUEST, "요청 파라미터가 유효하지 않습니다."),
 
     // 404
     NOT_FOUND_COLLECTING_BOX(NOT_FOUND, "해당 수거함이 존재하지 않습니다."),
