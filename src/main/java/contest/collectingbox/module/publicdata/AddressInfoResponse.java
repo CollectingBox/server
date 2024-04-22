@@ -17,21 +17,21 @@ public class AddressInfoResponse {
     private String sido;
     private String sigungu;
     private String dong;
-    private String road_name;
-    private String street_num;
+    private String roadName;
+    private String streetNum;
     private String name;
     private Tag tag;
 
     @Builder
     public AddressInfoResponse(String longitude, String latitude, String sido, String sigungu, String dong,
-                               String road_name, String street_num, String name, Tag tag) {
+                               String roadName, String streetNum, String name, Tag tag) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.sido = sido;
         this.sigungu = sigungu;
         this.dong = dong;
-        this.road_name = road_name;
-        this.street_num = street_num;
+        this.roadName = roadName;
+        this.streetNum = streetNum;
         this.name = name;
         this.tag = tag;
     }

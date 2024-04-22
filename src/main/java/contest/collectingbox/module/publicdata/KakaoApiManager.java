@@ -80,8 +80,8 @@ public class KakaoApiManager {
                 .sido(address.getString("region_1depth_name"))
                 .sigungu(address.getString("region_2depth_name"))
                 .dong(address.getString("region_3depth_name"))
-                .road_name(roadAddress.getString("address_name"))
-                .street_num(address.getString("address_name"))
+                .roadName(roadAddress.getString("address_name"))
+                .streetNum(address.getString("address_name"))
                 .name(detailName)
                 .tag(tag)
                 .build();
