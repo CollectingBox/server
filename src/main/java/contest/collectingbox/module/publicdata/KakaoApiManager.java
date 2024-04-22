@@ -2,7 +2,6 @@ package contest.collectingbox.module.publicdata;
 
 import static java.nio.charset.StandardCharsets.*;
 
-import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
