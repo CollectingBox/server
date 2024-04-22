@@ -1,5 +1,6 @@
 package contest.collectingbox.module.publicdata;
 
+import contest.collectingbox.module.collectingbox.domain.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -15,8 +16,10 @@ import java.util.Set;
 public class PublicDataService {
 
     private final PublicDataExtract publicDataExtract;
+    private final KakaoApiManager kakaoApiManager;
 
-    public long loadPublicData(JSONObject jsonObject) {
+
+    public long loadPublicData(JSONObject jsonObject, Tag tag) {
         long loadedDataCount = 0;
         JSONArray jsonArray = (JSONArray) jsonObject.get("data");
 
@@ -27,11 +30,13 @@ public class PublicDataService {
         }
 
         for (String query : querySet) {
-            System.out.println(query);
             loadedDataCount++;
 
-            // 주소 검색 API 호출(query)
-            // DTO 매핑
+            // query -> kakaoApi -> DTO
+            AddressInfoResponse response = kakaoApiManager.fetchAddressInfo(query, tag);
+            log.info("query = {}, response = {}", query, response);
+
+            // insert DB
         }
 
         return loadedDataCount;

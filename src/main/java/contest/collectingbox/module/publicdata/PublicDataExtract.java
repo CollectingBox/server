@@ -11,15 +11,18 @@ import java.util.Set;
 @Component
 public class PublicDataExtract {
 
-    private static final String[] KEYWORDS = {"도로", "지번", "주소"};
+    private static final String[] KEYWORDS = {"도로", "지번", "주소", "소재지", "위치", "장소"};
 
     public String extractQuery(JSONObject jsonObject) {
         Set<String> keySet = jsonObject.keySet();
-        for (String key : keySet) {
-            if (StringUtils.containsAny(key, KEYWORDS)) {
-                return jsonObject.get(key).toString();
+        for (String keyword : KEYWORDS) {
+            for (String key : keySet) {
+                if (key.contains(keyword) && !jsonObject.get(key).toString().isBlank()) {
+                    return jsonObject.get(key).toString();
+                }
             }
         }
+
         log.error("Not contains anything!!!");
 
         return null;
