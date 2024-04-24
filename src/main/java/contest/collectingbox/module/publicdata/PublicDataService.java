@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -15,9 +16,15 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class PublicDataService {
 
+    private final PublicDataApiInfoRepository publicDataApiInfoRepository;
     private final PublicDataExtract publicDataExtract;
     private final KakaoApiManager kakaoApiManager;
 
+    public void savePublicDataApiInfo(List<SavePublicDataApiInfoRequest> requests) {
+        for (SavePublicDataApiInfoRequest request : requests) {
+            publicDataApiInfoRepository.save(request.toEntity());
+        }
+    }
 
     public long loadPublicData(JSONObject jsonObject, Tag tag) {
         long loadedDataCount = 0;
