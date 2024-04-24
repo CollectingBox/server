@@ -23,6 +23,7 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
     public CollectingBoxDetailResponse findDetailById(Long id) {
 
         CollectingBoxDetailResponse response = queryFactory.select(new QCollectingBoxDetailResponse(
+                        location.point,
                         location.name, location.address.roadName,
                         location.address.streetNum,
                         collectingBox.updatedAt.stringValue(), collectingBox.tag
