@@ -76,6 +76,7 @@ class CollectingBoxServiceTest {
         // given
         Long collectionId = 1L;
         CollectingBoxDetailResponse expectedResponse = CollectingBoxDetailResponse.builder()
+                .point(GeometryUtil.toPoint(127.046374536307, 37.5067486779393))
                 .roadName("roadName")
                 .streetNumber("streetNumber")
                 .modifiedDate("2024-04-12 00:00:00.000000")

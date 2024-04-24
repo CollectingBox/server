@@ -10,10 +10,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.locationtech.jts.geom.Point;
 
 @Getter
 @NoArgsConstructor
 public class CollectingBoxDetailResponse {
+    @Schema(description = "위도", example = "37.5067486779393")
+    private Double latitude;
+    @Schema(description = "경도", example = "127.046374536307")
+    private Double longitude;
     @Schema(description = "상세위치", example = "이마트24")
     private String location;
     @Schema(description = "도로명 주소", example = "서울특별시 강남구 도산대로66길 43")
@@ -30,8 +35,10 @@ public class CollectingBoxDetailResponse {
 
     @QueryProjection
     @Builder
-    public CollectingBoxDetailResponse(String location, String roadName, String streetNumber, String modifiedDate,
+    public CollectingBoxDetailResponse(Point point, String location, String roadName, String streetNumber, String modifiedDate,
                                        Tag tag) {
+        this.latitude = point.getY();
+        this.longitude = point.getX();
         this.location = location;
         this.roadName = roadName;
         this.streetNumber = streetNumber;
