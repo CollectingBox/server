@@ -30,6 +30,12 @@ public class PublicDataApiController {
     @Value("${public-data.api.key}")
     private String apiKey;
 
+    @PostMapping("/public-data/info")
+    public ApiResponse<Integer> savePublicDataApiInfo(@RequestBody List<SavePublicDataApiInfoRequest> requests) {
+        publicDataService.savePublicDataApiInfo(requests);
+        return ApiResponse.ok(requests.size());
+    }
+
     @PostMapping("/public-data/load")
     public ApiResponse<Long> loadPublicData(@RequestBody List<LoadPublicDataRequest> requests) {
         long loadedDataCount = 0;
