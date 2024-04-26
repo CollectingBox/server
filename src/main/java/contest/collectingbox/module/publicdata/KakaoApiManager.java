@@ -1,36 +1,32 @@
 package contest.collectingbox.module.publicdata;
 
-import static java.nio.charset.StandardCharsets.*;
-
 import contest.collectingbox.module.collectingbox.domain.Tag;
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class KakaoApiManager {
+    private static final String API_URL = "https://dapi.kakao.com/v2/local/search/address.json";
+
     @Value("${kakao.api.key}")
     private String apiKey;
-    private final String apiUrl = "https://dapi.kakao.com/v2/local/search/address.json";
 
     public AddressInfoResponse fetchAddressInfo(String query, Tag tag) {
         try {
-
             ResponseEntity<String> response = callKakaoAPI(query);
             if (response.getStatusCode() != HttpStatus.OK) {
                 log.error("Kakao API call failed status : {}", response.getStatusCode());
@@ -58,11 +54,10 @@ public class KakaoApiManager {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("Authorization", "KakaoAK " + apiKey);
         HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
-        URI targetUrl = UriComponentsBuilder.fromUriString(apiUrl).queryParam("query", query)
+        URI targetUrl = UriComponentsBuilder.fromUriString(API_URL).queryParam("query", query)
                 .build().encode(UTF_8).toUri();
 
-        return restTemplate.exchange(targetUrl, HttpMethod.GET, httpEntity,
-                String.class);
+        return restTemplate.exchange(targetUrl, HttpMethod.GET, httpEntity, String.class);
     }
 
     private AddressInfoResponse makeAddressDto(JSONObject document, Tag tag) {
