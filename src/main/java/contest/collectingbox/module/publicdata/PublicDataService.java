@@ -37,13 +37,28 @@ public class PublicDataService {
         }
 
         for (String query : querySet) {
-            loadedDataCount++;
+            // 검색 키워드 null 체크
+            if (query == null) {
+                continue;
+            }
 
-            // query -> kakaoApi -> DTO
+            // 카카오 주소 검색 API 호출
             AddressInfoResponse response = kakaoApiManager.fetchAddressInfo(query, tag);
+
+            // 카카오 주소 검색 API 응답 null 체크
+            if (response == null) {
+                continue;
+            }
+
+            if (response.hasNull()) {
+                throw new RuntimeException("null");
+            }
+
+            // 카카오 주소 검색 API 응답 출력
             log.info("query = {}, response = {}", query, response);
 
             // insert DB
+            loadedDataCount++;
         }
 
         return loadedDataCount;
