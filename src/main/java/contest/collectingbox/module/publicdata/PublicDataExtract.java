@@ -1,7 +1,6 @@
 package contest.collectingbox.module.publicdata;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
@@ -17,15 +16,14 @@ public class PublicDataExtract {
         Set<String> keySet = jsonObject.keySet();
         for (String keyword : KEYWORDS) {
             for (String key : keySet) {
-                if (key.contains(keyword) && !jsonObject.get(key).toString().isBlank()) {
+                if (key.contains(keyword) && !jsonObject.isNull(key)) {
                     return jsonObject.get(key).toString();
                 }
             }
         }
 
-        log.error("Not contains anything!!!");
+        log.error("Not contains anything in {}", jsonObject);
 
         return null;
     }
 }
-
