@@ -28,11 +28,14 @@ public class KakaoApiManager {
     public AddressInfoResponse fetchAddressInfo(String query, Tag tag) {
         try {
             ResponseEntity<String> response = callKakaoAPI(query);
+
+            // 카카오 API 예외 처리
             if (response.getStatusCode() != HttpStatus.OK) {
                 log.error("Kakao API call failed status : {}", response.getStatusCode());
                 throw new RuntimeException("Kakao API fail exception");
             }
 
+            // 주소 정보 추출
             JSONObject jsonObject = new JSONObject(response.getBody());
             JSONArray documents = jsonObject.getJSONArray("documents");
 
@@ -61,25 +64,58 @@ public class KakaoApiManager {
     }
 
     private AddressInfoResponse makeAddressDto(JSONObject document, Tag tag) {
+        AddressInfoResponse.AddressInfoResponseBuilder builder = AddressInfoResponse.builder()
+                .longitude(document.getDouble("x"))
+                .latitude(document.getDouble("y"))
+                .tag(tag);
+
+        if (document.isNull("address")) {
+            return getRoadAddressInfo(document, tag, builder);
+        }
+
+        if (document.isNull("road_address")) {
+            return getAddressInfo(document, builder);
+        }
+
+        return getAddressInfoResponse(document, tag, builder);
+    }
+
+    private AddressInfoResponse getAddressInfoResponse(JSONObject document, Tag tag, AddressInfoResponse.AddressInfoResponseBuilder builder) {
         JSONObject address = document.getJSONObject("address");
         JSONObject roadAddress = document.getJSONObject("road_address");
-
-        String buildingName = roadAddress.getString("building_name");
-        String detailName = buildingName.isEmpty() ?
-                (tag.name().equals("TRASH") ? tag.getLabel() : tag.getLabel() + " 수거함")
-                : buildingName;
-
-        return AddressInfoResponse.builder()
-                .longitude(document.getString("x"))
-                .latitude(document.getString("y"))
+        return builder
                 .sido(address.getString("region_1depth_name"))
                 .sigungu(address.getString("region_2depth_name"))
                 .dong(address.getString("region_3depth_name"))
-                .roadName(roadAddress.getString("address_name"))
+                .name(getDetailName(tag, roadAddress))
                 .streetNum(address.getString("address_name"))
-                .name(detailName)
-                .tag(tag)
+                .roadName(roadAddress.getString("address_name"))
                 .build();
+    }
 
+    private AddressInfoResponse getRoadAddressInfo(JSONObject document, Tag tag, AddressInfoResponse.AddressInfoResponseBuilder builder) {
+        JSONObject roadAddress = document.getJSONObject("road_address");
+        return builder.name(getDetailName(tag, roadAddress))
+                .sido(roadAddress.getString("region_1depth_name"))
+                .sigungu(roadAddress.getString("region_2depth_name"))
+                .dong(roadAddress.getString("region_3depth_name"))
+                .roadName(roadAddress.getString("address_name"))
+                .build();
+    }
+
+    private AddressInfoResponse getAddressInfo(JSONObject document, AddressInfoResponse.AddressInfoResponseBuilder builder) {
+        JSONObject address = document.getJSONObject("address");
+        return builder.sido(address.getString("region_1depth_name"))
+                .sigungu(address.getString("region_2depth_name"))
+                .dong(address.getString("region_3depth_name"))
+                .streetNum(address.getString("address_name"))
+                .build();
+    }
+
+    private String getDetailName(Tag tag, JSONObject roadAddress) {
+        String buildingName = roadAddress.getString("building_name");
+        return buildingName.isEmpty() ?
+                (tag.name().equals("TRASH") ? tag.getLabel() : tag.getLabel() + " 수거함")
+                : buildingName;
     }
 }
