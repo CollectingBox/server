@@ -1,7 +1,5 @@
 package contest.collectingbox.module.collectingbox.application;
 
-import static contest.collectingbox.global.exception.ErrorCode.*;
-
 import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.global.exception.ErrorCode;
 import contest.collectingbox.global.utils.GeometryUtil;
@@ -19,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static contest.collectingbox.global.exception.ErrorCode.NOT_FOUND_COLLECTING_BOX;
 
 @Service
 @RequiredArgsConstructor
