@@ -38,18 +38,22 @@ public class AddressInfoResponse {
         Location location = Location.builder()
                 .name(name)
                 .point(GeometryUtil.toPoint(longitude, latitude))
-                .address(Address.builder()
-                        .sido(sido)
-                        .sigungu(sigungu)
-                        .dong(dong)
-                        .roadName(roadName)
-                        .streetNum(streetNum)
-                        .build())
+                .address(getAddress(sido, sigungu, dong, roadName, streetNum))
                 .build();
 
         return CollectingBox.builder()
                 .location(location)
                 .tag(tag)
+                .build();
+    }
+
+    private Address getAddress(String sido, String sigungu, String dong, String roadName, String streetNum) {
+        return Address.builder()
+                .sido(sido)
+                .sigungu(sigungu)
+                .dong(dong)
+                .roadName(roadName)
+                .streetNum(streetNum)
                 .build();
     }
 }
