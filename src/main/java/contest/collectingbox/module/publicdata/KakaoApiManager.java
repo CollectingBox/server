@@ -70,32 +70,21 @@ public class KakaoApiManager {
                 .tag(tag);
 
         if (document.isNull("address")) {
-            return getRoadAddressInfo(document, tag, builder);
+            return getResponseWithRoadAddress(document, tag, builder);
         }
 
         if (document.isNull("road_address")) {
-            return getAddressInfo(document, builder);
+            return getResponseWithAddress(document, tag, builder);
         }
 
-        return getAddressInfoResponse(document, tag, builder);
+        return getResponse(document, tag, builder);
     }
 
-    private AddressInfoResponse getAddressInfoResponse(JSONObject document, Tag tag, AddressInfoResponse.AddressInfoResponseBuilder builder) {
-        JSONObject address = document.getJSONObject("address");
+    private AddressInfoResponse getResponseWithRoadAddress(JSONObject document,
+                                                           Tag tag,
+                                                           AddressInfoResponse.AddressInfoResponseBuilder builder) {
         JSONObject roadAddress = document.getJSONObject("road_address");
-        return builder
-                .sido(address.getString("region_1depth_name"))
-                .sigungu(address.getString("region_2depth_name"))
-                .dong(address.getString("region_3depth_name"))
-                .name(getDetailName(tag, roadAddress))
-                .streetNum(address.getString("address_name"))
-                .roadName(roadAddress.getString("address_name"))
-                .build();
-    }
-
-    private AddressInfoResponse getRoadAddressInfo(JSONObject document, Tag tag, AddressInfoResponse.AddressInfoResponseBuilder builder) {
-        JSONObject roadAddress = document.getJSONObject("road_address");
-        return builder.name(getDetailName(tag, roadAddress))
+        return builder.name(getDetailName(tag, roadAddress.getString("building_name")))
                 .sido(roadAddress.getString("region_1depth_name"))
                 .sigungu(roadAddress.getString("region_2depth_name"))
                 .dong(roadAddress.getString("region_3depth_name"))
@@ -103,19 +92,34 @@ public class KakaoApiManager {
                 .build();
     }
 
-    private AddressInfoResponse getAddressInfo(JSONObject document, AddressInfoResponse.AddressInfoResponseBuilder builder) {
+    private AddressInfoResponse getResponseWithAddress(JSONObject document, Tag tag, AddressInfoResponse.AddressInfoResponseBuilder builder) {
         JSONObject address = document.getJSONObject("address");
-        return builder.sido(address.getString("region_1depth_name"))
+        return builder.name(getDetailName(tag, ""))
+                .sido(address.getString("region_1depth_name"))
                 .sigungu(address.getString("region_2depth_name"))
                 .dong(address.getString("region_3depth_name"))
                 .streetNum(address.getString("address_name"))
                 .build();
     }
 
-    private String getDetailName(Tag tag, JSONObject roadAddress) {
-        String buildingName = roadAddress.getString("building_name");
+    private AddressInfoResponse getResponse(JSONObject document,
+                                            Tag tag,
+                                            AddressInfoResponse.AddressInfoResponseBuilder builder) {
+        JSONObject address = document.getJSONObject("address");
+        JSONObject roadAddress = document.getJSONObject("road_address");
+        return builder
+                .sido(address.getString("region_1depth_name"))
+                .sigungu(address.getString("region_2depth_name"))
+                .dong(address.getString("region_3depth_name"))
+                .name(getDetailName(tag, roadAddress.getString("building_name")))
+                .streetNum(address.getString("address_name"))
+                .roadName(roadAddress.getString("address_name"))
+                .build();
+    }
+
+    private String getDetailName(Tag tag, String buildingName) {
         return buildingName.isEmpty() ?
                 (tag.name().equals("TRASH") ? tag.getLabel() : tag.getLabel() + " 수거함")
-                : buildingName;
+                : buildingName + " 근처 수거함";
     }
 }
