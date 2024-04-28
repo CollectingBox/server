@@ -43,7 +43,8 @@ public class PublicDataApiController {
             try {
                 System.out.printf("======= %s - %s =======%n", request.getSigungu(), request.getTag().getLabel());
                 int totalCount = getTotalCountOfPublicData(request);
-                loadedDataCount += publicDataService.loadPublicData(callPublicDataApi(request, totalCount), request.getTag());
+                loadedDataCount += publicDataService.loadPublicData(callPublicDataApi(request, totalCount),
+                        request.getTag());
 
             } catch (IOException e) {
                 throw new RuntimeException(e);

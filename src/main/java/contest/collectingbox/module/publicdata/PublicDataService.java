@@ -1,5 +1,6 @@
 package contest.collectingbox.module.publicdata;
 
+import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ public class PublicDataService {
     private final PublicDataApiInfoRepository publicDataApiInfoRepository;
     private final PublicDataExtract publicDataExtract;
     private final KakaoApiManager kakaoApiManager;
+    private final CollectingBoxRepository collectingBoxRepository;
 
     public void savePublicDataApiInfo(List<SavePublicDataApiInfoRequest> requests) {
         for (SavePublicDataApiInfoRequest request : requests) {
@@ -59,6 +61,7 @@ public class PublicDataService {
 
             // insert DB
             loadedDataCount++;
+            collectingBoxRepository.save(response.toEntity());
         }
 
         return loadedDataCount;

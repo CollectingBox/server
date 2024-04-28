@@ -1,6 +1,10 @@
 package contest.collectingbox.module.publicdata;
 
+import contest.collectingbox.global.utils.GeometryUtil;
+import contest.collectingbox.module.collectingbox.domain.CollectingBox;
 import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.location.domain.Address;
+import contest.collectingbox.module.location.domain.Location;
 import lombok.*;
 
 
@@ -28,5 +32,24 @@ public class AddressInfoResponse {
                 dong == null ||
                 (name == null && roadName == null && streetNum == null) ||
                 tag == null;
+    }
+
+    public CollectingBox toEntity() {
+        Location location = Location.builder()
+                .name(name)
+                .point(GeometryUtil.toPoint(longitude, latitude))
+                .address(Address.builder()
+                        .sido(sido)
+                        .sigungu(sigungu)
+                        .dong(dong)
+                        .roadName(roadName)
+                        .streetNum(streetNum)
+                        .build())
+                .build();
+
+        return CollectingBox.builder()
+                .location(location)
+                .tag(tag)
+                .build();
     }
 }
