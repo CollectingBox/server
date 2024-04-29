@@ -66,7 +66,7 @@ public class PublicDataService {
             log.info("query = {}, response = {}", query, response);
 
             // insert DB
-            if (response != null && equals(response.getSigungu(), sigungu)) {
+            if (equals(response.getSigungu(), sigungu)) {
                 loadedDataCount++;
                 collectingBoxRepository.save(response.toEntity());
             }
