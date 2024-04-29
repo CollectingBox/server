@@ -26,4 +26,16 @@ public class PublicDataExtract {
 
         return null;
     }
+
+    public int extractCsvQueryIndex(String[] columnNames) {
+        for (String keyword : KEYWORDS) {
+            for (int i = 0; i < columnNames.length; i++) {
+                if (columnNames[i].contains(keyword)) {
+                    return i;
+                }
+            }
+        }
+        log.error("No csv column name containing keywords, columnNames = {}", (Object) columnNames);
+        return -1;
+    }
 }
