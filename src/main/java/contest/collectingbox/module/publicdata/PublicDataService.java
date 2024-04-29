@@ -4,17 +4,17 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Slf4j
@@ -34,7 +34,7 @@ public class PublicDataService {
         }
     }
 
-    public long loadPublicData(JSONObject jsonObject, Tag tag) {
+    public long loadPublicData(JSONObject jsonObject, String sigungu, Tag tag) {
         long loadedDataCount = 0;
         JSONArray jsonArray = (JSONArray) jsonObject.get("data");
 
@@ -66,8 +66,10 @@ public class PublicDataService {
             log.info("query = {}, response = {}", query, response);
 
             // insert DB
-            loadedDataCount++;
-            collectingBoxRepository.save(response.toEntity());
+            if (equals(response.getSigungu(), sigungu)) {
+                loadedDataCount++;
+                collectingBoxRepository.save(response.toEntity());
+            }
         }
 
         return loadedDataCount;
@@ -83,15 +85,14 @@ public class PublicDataService {
             if (columnIndex == -1) {
                 return 0;
             }
-            return saveCsvPublicData(csvReader, columnIndex, request.getTag());
+            return saveCsvPublicData(csvReader, columnIndex, request.getSigungu(), request.getTag());
         } catch (IOException | CsvValidationException e) {
             log.error("Fail loading CSV file: {}", e.getMessage());
             throw new RuntimeException(e);
         }
-
     }
 
-    private long saveCsvPublicData(CSVReader csvReader, int index, Tag tag) throws CsvValidationException, IOException {
+    private long saveCsvPublicData(CSVReader csvReader, int index, String sigungu, Tag tag) throws CsvValidationException, IOException {
         long dataCount = 0;
         String[] line;
         Set<String> querySet = new HashSet<>();
@@ -102,7 +103,7 @@ public class PublicDataService {
             }
             querySet.add(query);
 
-            if (query.isEmpty()) {
+            if (query.isBlank()) {
                 continue;
             }
 
@@ -112,10 +113,17 @@ public class PublicDataService {
             if (response == null || response.hasNull() || response.hasEmptyValue()) {
                 continue;
             }
-
-            dataCount++;
-            collectingBoxRepository.save(response.toEntity());
+          
+            if (equals(response.getSigungu(), sigungu)) {
+                dataCount++;
+                collectingBoxRepository.save(response.toEntity());
+            }
         }
+
         return dataCount;
+    }
+
+    private boolean equals(String sigungu, String originSigungu) {
+        return sigungu.equals(originSigungu);
     }
 }

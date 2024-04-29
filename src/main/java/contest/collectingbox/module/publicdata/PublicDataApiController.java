@@ -1,6 +1,5 @@
 package contest.collectingbox.module.publicdata;
 
-import com.opencsv.exceptions.CsvValidationException;
 import contest.collectingbox.global.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +44,7 @@ public class PublicDataApiController {
                 System.out.printf("======= %s - %s =======%n", request.getSigungu(), request.getTag().getLabel());
                 int totalCount = getTotalCountOfPublicData(request);
                 loadedDataCount += publicDataService.loadPublicData(callPublicDataApi(request, totalCount),
+                        request.getSigungu(),
                         request.getTag());
 
             } catch (IOException e) {

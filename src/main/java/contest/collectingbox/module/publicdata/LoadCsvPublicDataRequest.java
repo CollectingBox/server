@@ -5,6 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class LoadCsvPublicDataRequest {
+
+    private String sigungu;
     private String fileName;
     private Tag tag;
 }
