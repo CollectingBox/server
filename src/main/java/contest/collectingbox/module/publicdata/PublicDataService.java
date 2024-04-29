@@ -119,7 +119,7 @@ public class PublicDataService {
         return dataCount;
     }
 
-    public boolean equals(String sigungu, String originSigungu) {
+    private boolean equals(String sigungu, String originSigungu) {
         return sigungu.equals(originSigungu);
     }
 }
