@@ -110,7 +110,11 @@ public class PublicDataService {
             AddressInfoResponse response = kakaoApiManager.fetchAddressInfo(query, tag);
             log.info("query = {}, response = {}", query, response);
 
-            if (response != null && equals(response.getSigungu(), sigungu)) {
+            if (response == null || response.hasNull() || response.hasEmptyValue()) {
+                continue;
+            }
+          
+            if (equals(response.getSigungu(), sigungu)) {
                 dataCount++;
                 collectingBoxRepository.save(response.toEntity());
             }
