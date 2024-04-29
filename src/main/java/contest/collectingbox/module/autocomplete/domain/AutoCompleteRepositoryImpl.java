@@ -21,7 +21,7 @@ public class AutoCompleteRepositoryImpl implements AutoCompleteRepositoryCustom 
         QLocation location = QLocation.location;
         // SELECT DISTINCT l FROM Location l WHERE l.address.streetNum LIKE %:query% ORDER BY l.address.sigungu, l.address.dong LIMIT 5
         return queryFactory
-                .select(new QAddressDto(location.address.sigungu, location.address.dong))
+                .selectDistinct(new QAddressDto(location.address.sigungu, location.address.dong))
                 .from(location)
                 .where(location.address.streetNum.contains(query))
                 .orderBy(location.address.sigungu.asc(), location.address.dong.asc())
