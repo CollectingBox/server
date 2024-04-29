@@ -34,6 +34,12 @@ public class AddressInfoResponse {
                 tag == null;
     }
 
+    public boolean hasEmptyValue() {
+        return sido.isEmpty() || sigungu.isEmpty() || dong.isEmpty() ||
+                (name.isEmpty() && roadName.isEmpty() && streetNum.isEmpty())
+                || tag.name().isEmpty();
+    }
+
     public CollectingBox toEntity() {
         Location location = Location.builder()
                 .name(name)

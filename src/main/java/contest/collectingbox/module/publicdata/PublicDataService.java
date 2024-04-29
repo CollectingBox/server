@@ -102,18 +102,19 @@ public class PublicDataService {
             }
             querySet.add(query);
 
-            if (query == null || query.isEmpty()) {
+            if (query.isEmpty()) {
                 continue;
             }
 
             AddressInfoResponse response = kakaoApiManager.fetchAddressInfo(query, tag);
             log.info("query = {}, response = {}", query, response);
 
-            if (response != null) {
-                dataCount++;
-                collectingBoxRepository.save(response.toEntity());
+            if (response == null || response.hasNull() || response.hasEmptyValue()) {
+                continue;
             }
 
+            dataCount++;
+            collectingBoxRepository.save(response.toEntity());
         }
         return dataCount;
     }
