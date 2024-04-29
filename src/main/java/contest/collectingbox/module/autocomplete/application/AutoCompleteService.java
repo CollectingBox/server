@@ -22,6 +22,7 @@ public class AutoCompleteService {
                 autoCompleteRepository.findAutoComplete(query)
                         .stream()
                         .map(this::formatAddress)
+                        .distinct()
                         .collect(Collectors.toList());
         return new AutoCompleteResponseDto(items);
     }
