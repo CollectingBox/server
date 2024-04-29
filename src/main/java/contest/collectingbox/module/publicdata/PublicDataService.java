@@ -1,7 +1,12 @@
 package contest.collectingbox.module.publicdata;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -17,6 +22,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class PublicDataService {
 
+    private static final String CSV_FILE_PATH = "csv/";
     private final PublicDataApiInfoRepository publicDataApiInfoRepository;
     private final PublicDataExtract publicDataExtract;
     private final KakaoApiManager kakaoApiManager;
@@ -65,5 +71,50 @@ public class PublicDataService {
         }
 
         return loadedDataCount;
+    }
+
+    public long loadCsvPublicData(LoadCsvPublicDataRequest request) {
+        String fileName = CSV_FILE_PATH + request.getFileName();
+        try {
+            CSVReader csvReader = new CSVReader(new InputStreamReader(
+                    Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(fileName)), "EUC-KR"));
+
+            int columnIndex = publicDataExtract.extractCsvQueryIndex(csvReader.readNext());
+            if (columnIndex == -1) {
+                return 0;
+            }
+            return saveCsvPublicData(csvReader, columnIndex, request.getTag());
+        } catch (IOException | CsvValidationException e) {
+            log.error("Fail loading CSV file: {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private long saveCsvPublicData(CSVReader csvReader, int index, Tag tag) throws CsvValidationException, IOException {
+        long dataCount = 0;
+        String[] line;
+        Set<String> querySet = new HashSet<>();
+        while ((line = csvReader.readNext()) != null) {
+            String query = line[index];
+            if (querySet.contains(query)) {
+                continue;
+            }
+            querySet.add(query);
+
+            if (query == null || query.isEmpty()) {
+                continue;
+            }
+
+            AddressInfoResponse response = kakaoApiManager.fetchAddressInfo(query, tag);
+            log.info("query = {}, response = {}", query, response);
+
+            if (response != null) {
+                dataCount++;
+                collectingBoxRepository.save(response.toEntity());
+            }
+
+        }
+        return dataCount;
     }
 }

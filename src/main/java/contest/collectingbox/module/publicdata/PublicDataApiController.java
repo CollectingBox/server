@@ -1,5 +1,6 @@
 package contest.collectingbox.module.publicdata;
 
+import com.opencsv.exceptions.CsvValidationException;
 import contest.collectingbox.global.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +52,15 @@ public class PublicDataApiController {
             }
         }
 
+        return ApiResponse.ok(loadedDataCount);
+    }
+
+    @PostMapping("/public-data/csv")
+    public ApiResponse<Long> loadCsvPublicData(@RequestBody List<LoadCsvPublicDataRequest> requests) {
+        long loadedDataCount = 0;
+        for (LoadCsvPublicDataRequest request : requests) {
+            loadedDataCount += publicDataService.loadCsvPublicData(request);
+        }
         return ApiResponse.ok(loadedDataCount);
     }
 
