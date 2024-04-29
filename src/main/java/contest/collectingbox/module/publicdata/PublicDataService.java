@@ -96,7 +96,7 @@ public class PublicDataService {
         String[] line;
         Set<String> querySet = new HashSet<>();
         while ((line = csvReader.readNext()) != null) {
-            String query = line[index];
+            String query = line[index].trim();
             if (querySet.contains(query)) {
                 continue;
             }
