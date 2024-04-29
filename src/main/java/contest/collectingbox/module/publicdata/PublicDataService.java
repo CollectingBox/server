@@ -34,7 +34,7 @@ public class PublicDataService {
         }
     }
 
-    public long loadPublicData(JSONObject jsonObject, Tag tag) {
+    public long loadPublicData(JSONObject jsonObject, String sigungu, Tag tag) {
         long loadedDataCount = 0;
         JSONArray jsonArray = (JSONArray) jsonObject.get("data");
 
@@ -66,8 +66,10 @@ public class PublicDataService {
             log.info("query = {}, response = {}", query, response);
 
             // insert DB
-            loadedDataCount++;
-            collectingBoxRepository.save(response.toEntity());
+            if (response != null && equals(response.getSigungu(), sigungu)) {
+                loadedDataCount++;
+                collectingBoxRepository.save(response.toEntity());
+            }
         }
 
         return loadedDataCount;
