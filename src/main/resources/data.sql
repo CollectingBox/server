@@ -11,11 +11,11 @@ insert into location values (10, '용두 치안센터 쓰레기통', st_geomfrom
 
 insert into collecting_box values (1, 1, 'CLOTHES', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
 insert into collecting_box values (2, 2, 'CLOTHES', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
-insert into collecting_box values (3, 3, 'BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
-insert into collecting_box values (4, 4, 'BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
-insert into collecting_box values (5, 5, 'BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
-insert into collecting_box values (6, 6, 'BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
-insert into collecting_box values (7, 7, 'LAMP', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
+insert into collecting_box values (3, 3, 'LAMP_BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
+insert into collecting_box values (4, 4, 'LAMP_BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
+insert into collecting_box values (5, 5, 'LAMP_BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
+insert into collecting_box values (6, 6, 'LAMP_BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
+insert into collecting_box values (7, 7, 'LAMP_BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
 insert into collecting_box values (8, 8, 'MEDICINE', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
 insert into collecting_box values (9, 9, 'TRASH', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
 insert into collecting_box values (10, 10, 'TRASH', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
@@ -43,9 +43,9 @@ insert into collecting_box values (16, 16, 'CLOTHES', '2024-04-12 00:00:00', '20
 insert into collecting_box values (17, 17, 'CLOTHES', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
 insert into collecting_box values (18, 18, 'CLOTHES', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
 insert into collecting_box values (19, 19, 'CLOTHES', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
-insert into collecting_box values (20, 20, 'BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
-insert into collecting_box values (21, 21, 'BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
-insert into collecting_box values (22, 22, 'LAMP', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
+insert into collecting_box values (20, 20, 'LAMP_BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
+insert into collecting_box values (21, 21, 'LAMP_BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
+insert into collecting_box values (22, 22, 'LAMP_BATTERY', '2024-04-12 00:00:00', '2024-04-12 00:00:00');
 
 -- 강서구 화곡동 폐의류, 폐건전지, 폐형광등, 폐의약품 수거함 + 쓰레기통 (37.5404202469638 126.840017492851)
 insert into location values (23, '뉴파인빌 수거함', st_geomfromtext('point(37.5396125849777 126.840012768981)', 4326), '서울특별시', '강서구', '화곡동', '서울특별시 강서구 강서로31길27', '서울특별시 강서구 화곡동 1078-16', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
@@ -67,11 +67,11 @@ insert into location values (37, '쓰레기통', st_geomfromtext('point(37.54124
 insert into collecting_box values (23, 23, 'CLOTHES', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
 insert into collecting_box values (24, 24, 'CLOTHES', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
 insert into collecting_box values (25, 25, 'CLOTHES', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
-insert into collecting_box values (26, 26, 'BATTERY', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
-insert into collecting_box values (27, 27, 'BATTERY', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
-insert into collecting_box values (28, 28, 'BATTERY', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
-insert into collecting_box values (29, 29, 'LAMP', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
-insert into collecting_box values (30, 30, 'LAMP', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
+insert into collecting_box values (26, 26, 'LAMP_BATTERY', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
+insert into collecting_box values (27, 27, 'LAMP_BATTERY', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
+insert into collecting_box values (28, 28, 'LAMP_BATTERY', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
+insert into collecting_box values (29, 29, 'LAMP_BATTERY', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
+insert into collecting_box values (30, 30, 'LAMP_BATTERY', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
 insert into collecting_box values (31, 31, 'MEDICINE', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
 insert into collecting_box values (32, 32, 'MEDICINE', '2024-04-18 00:00:00', '2024-04-18 00:00:00');
 insert into collecting_box values (33, 33, 'MEDICINE', '2024-04-18 00:00:00', '2024-04-18 00:00:00');

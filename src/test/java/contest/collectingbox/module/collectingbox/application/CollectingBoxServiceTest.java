@@ -54,7 +54,7 @@ class CollectingBoxServiceTest {
     @DisplayName("위도와 경도를 기준으로 특정 반경에 위치한 수거함 목록 조회 성공")
     void findCollectingBoxesWithinArea_Success_withinArea() {
         // given
-        List<Tag> tags = List.of(CLOTHES, LAMP, BATTERY, MEDICINE, TRASH);
+        List<Tag> tags = List.of(CLOTHES, LAMP_BATTERY, MEDICINE, TRASH);
 
         CollectingBox box = CollectingBox.builder()
                 .id(1L)

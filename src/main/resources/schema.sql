@@ -13,7 +13,7 @@ CREATE TABLE collecting_box
 (
     id          BIGINT NOT NULL AUTO_INCREMENT,
     location_id BIGINT,
-    tag         ENUM ('CLOTHES','LAMP','BATTERY','MEDICINE','TRASH') NOT NULL,
+    tag         ENUM ('CLOTHES','LAMP_BATTERY','MEDICINE','TRASH') NOT NULL,
     created_at  DATETIME(6),
     updated_at  DATETIME(6),
     PRIMARY KEY (id)
