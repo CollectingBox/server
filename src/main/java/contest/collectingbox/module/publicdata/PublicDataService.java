@@ -41,7 +41,7 @@ public class PublicDataService {
         Set<String> querySet = new HashSet<>();
         for (Object o : jsonArray) {
             JSONObject object = (JSONObject) o;
-            querySet.add(publicDataExtract.extractQuery(object));
+            querySet.add(publicDataExtract.extractQuery(object, sigungu, tag));
         }
 
         for (String query : querySet) {
@@ -63,7 +63,7 @@ public class PublicDataService {
             }
 
             // 카카오 주소 검색 API 응답 출력
-            log.info("query = {}, response = {}", query, response);
+            log.info("'LAMP_BATTERY'{}, response = {}", query, response);
 
             // insert DB
             if (equals(response.getSigungu(), sigungu)) {
@@ -81,7 +81,8 @@ public class PublicDataService {
             CSVReader csvReader = new CSVReader(new InputStreamReader(
                     Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(fileName)), "EUC-KR"));
 
-            int columnIndex = publicDataExtract.extractCsvQueryIndex(csvReader.readNext());
+            int columnIndex = publicDataExtract.extractCsvQueryIndex(csvReader.readNext(), request.getSigungu(),
+                    request.getTag());
             if (columnIndex == -1) {
                 return 0;
             }
@@ -92,7 +93,8 @@ public class PublicDataService {
         }
     }
 
-    private long saveCsvPublicData(CSVReader csvReader, int index, String sigungu, Tag tag) throws CsvValidationException, IOException {
+    private long saveCsvPublicData(CSVReader csvReader, int index, String sigungu, Tag tag)
+            throws CsvValidationException, IOException {
         long dataCount = 0;
         String[] line;
         Set<String> querySet = new HashSet<>();
@@ -101,6 +103,7 @@ public class PublicDataService {
             if (querySet.contains(query)) {
                 continue;
             }
+            System.out.println("query = " + query);
             querySet.add(query);
 
             if (query.isBlank()) {
@@ -113,7 +116,7 @@ public class PublicDataService {
             if (response == null || response.hasNull() || response.hasEmptyValue()) {
                 continue;
             }
-          
+
             if (equals(response.getSigungu(), sigungu)) {
                 dataCount++;
                 collectingBoxRepository.save(response.toEntity());
