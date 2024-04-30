@@ -23,7 +23,7 @@ public class CollectingBoxResponse {
     private Double longitude;
 
     @Schema(description = "태그", example = "CLOTHES",
-            allowableValues = {"CLOTHES", "LAMP", "BATTERY", "MEDICINE", "TRASH"})
+            allowableValues = {"CLOTHES", "LAMP_BATTERY", "MEDICINE", "TRASH"})
     private String tag;
 
     public static CollectingBoxResponse fromEntity(CollectingBox collectingBox) {
