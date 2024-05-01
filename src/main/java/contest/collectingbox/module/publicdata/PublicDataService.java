@@ -63,7 +63,7 @@ public class PublicDataService {
             }
 
             // 카카오 주소 검색 API 응답 출력
-            log.info("'LAMP_BATTERY'{}, response = {}", query, response);
+            log.info("query = {}, response = {}", query, response);
 
             // insert DB
             if (equals(response.getSigungu(), sigungu)) {
