@@ -103,7 +103,6 @@ public class PublicDataService {
             if (querySet.contains(query)) {
                 continue;
             }
-            System.out.println("query = " + query);
             querySet.add(query);
 
             if (query.isBlank()) {
