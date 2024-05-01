@@ -31,7 +31,7 @@ public class CollectingBoxResponse {
                 .id(collectingBox.getId())
                 .latitude(collectingBox.getLocation().latitude())
                 .longitude(collectingBox.getLocation().longitude())
-                .tag(collectingBox.getTag().getLabel())
+                .tag(collectingBox.getTag().name())
                 .build();
     }
 }
