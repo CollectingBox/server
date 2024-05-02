@@ -92,12 +92,13 @@ public class KakaoApiManager {
                 .build();
     }
 
-    private AddressInfoResponse getResponseWithAddress(JSONObject document, Tag tag, AddressInfoResponse.AddressInfoResponseBuilder builder) {
+    private AddressInfoResponse getResponseWithAddress(JSONObject document, Tag tag,
+                                                       AddressInfoResponse.AddressInfoResponseBuilder builder) {
         JSONObject address = document.getJSONObject("address");
         return builder.name(getDetailName(tag, ""))
                 .sido(address.getString("region_1depth_name"))
                 .sigungu(address.getString("region_2depth_name"))
-                .dong(address.getString("region_3depth_name"))
+                .dong(address.getString("region_3depth_h_name"))
                 .streetNum(address.getString("address_name"))
                 .build();
     }
@@ -110,7 +111,7 @@ public class KakaoApiManager {
         return builder
                 .sido(address.getString("region_1depth_name"))
                 .sigungu(address.getString("region_2depth_name"))
-                .dong(address.getString("region_3depth_name"))
+                .dong(address.getString("region_3depth_h_name"))
                 .name(getDetailName(tag, roadAddress.getString("building_name")))
                 .streetNum(address.getString("address_name"))
                 .roadName(roadAddress.getString("address_name"))
