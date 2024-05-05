@@ -19,7 +19,7 @@ public class LoggingAspect {
     }
 
     @Around("cut()")
-    public Object doLogRequest(final ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object doLogging(final ProceedingJoinPoint joinPoint) throws Throwable {
         final HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
         final String ipAddr = request.getRemoteAddr();
