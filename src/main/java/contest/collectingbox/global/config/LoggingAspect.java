@@ -33,7 +33,7 @@ public class LoggingAspect {
             log.info("[RESPONSE] {}", result);
             return result;
         }catch(Exception e){
-            log.error("[RESPONSE] exception message = {}", e.getMessage());
+            log.error("[RESPONSE] exception message = {} {}", e.getMessage(), e.getStackTrace()[0]);
             throw e;
         }
 
