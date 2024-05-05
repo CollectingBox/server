@@ -51,7 +51,7 @@ public class PublicDataService {
             }
 
             // 카카오 주소 검색 API 호출
-            AddressInfoResponse response = kakaoApiManager.fetchAddressInfo(query, tag);
+            AddressInfoDto response = kakaoApiManager.fetchAddressInfo(query, tag);
 
             // 카카오 주소 검색 API 응답 null 체크
             if (response == null) {
@@ -109,7 +109,7 @@ public class PublicDataService {
                 continue;
             }
 
-            AddressInfoResponse response = kakaoApiManager.fetchAddressInfo(query, tag);
+            AddressInfoDto response = kakaoApiManager.fetchAddressInfo(query, tag);
             log.info("query = {}, response = {}", query, response);
 
             if (response == null || response.hasNull() || response.hasEmptyValue()) {

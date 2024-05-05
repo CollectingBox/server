@@ -13,7 +13,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressInfoResponse {
+public class AddressInfoDto {
     private Double longitude;
     private Double latitude;
     private String sido;
