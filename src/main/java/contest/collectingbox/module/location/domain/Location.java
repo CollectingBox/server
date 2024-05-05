@@ -16,13 +16,16 @@ public class Location extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dong_cd")
+    private DongInfo dongInfo;
+
     private String name;
+    private String roadName;
+    private String streetNum;
 
     @Column(columnDefinition = "point SRID 4326")
     private Point point;
-
-    @Embedded
-    private Address address;
 
     public double latitude() {
         return point.getY();
