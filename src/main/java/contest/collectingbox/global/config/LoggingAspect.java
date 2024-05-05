@@ -28,9 +28,14 @@ public class LoggingAspect {
         final Object[] args = joinPoint.getArgs();
 
         log.info("[REQUEST] {} {} {} args={}", ipAddr, method, requestURI, args);
-        Object result = joinPoint.proceed();
-        log.info("[RESPONSE] {}", result);
-        return result;
+        try{
+            Object result = joinPoint.proceed();
+            log.info("[RESPONSE] {}", result);
+            return result;
+        }catch(Exception e){
+            log.error("[RESPONSE] exception message = {}", e.getMessage());
+            throw e;
+        }
 
     }
 }
