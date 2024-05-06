@@ -3,7 +3,7 @@ package contest.collectingbox.module.publicdata;
 import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
 import contest.collectingbox.module.collectingbox.domain.Tag;
-import contest.collectingbox.module.location.domain.Address;
+import contest.collectingbox.module.location.domain.DongInfoRepository;
 import contest.collectingbox.module.location.domain.Location;
 import lombok.*;
 
@@ -40,26 +40,18 @@ public class AddressInfoDto {
                 || tag.name().isEmpty();
     }
 
-    public CollectingBox toEntity() {
+    public CollectingBox toCollectingBox(DongInfoRepository repository) {
         Location location = Location.builder()
+                .dongInfo(repository.findBySigunguNmAndDongNm(sigungu, dong))
                 .name(name)
+                .roadName(roadName)
+                .streetNum(streetNum)
                 .point(GeometryUtil.toPoint(longitude, latitude))
-                .address(getAddress(sido, sigungu, dong, roadName, streetNum))
                 .build();
 
         return CollectingBox.builder()
                 .location(location)
                 .tag(tag)
-                .build();
-    }
-
-    private Address getAddress(String sido, String sigungu, String dong, String roadName, String streetNum) {
-        return Address.builder()
-                .sido(sido)
-                .sigungu(sigungu)
-                .dong(dong)
-                .roadName(roadName)
-                .streetNum(streetNum)
                 .build();
     }
 }
