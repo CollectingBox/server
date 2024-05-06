@@ -27,7 +27,6 @@ public class ReviewController {
     @Operation(summary = "수거함 리뷰 등록", description = "수거함 ID에 해당되는 수거함에 리뷰를 등록합니다.")
     @PostMapping("/{collectionId}/review")
     public ApiResponse<Long> postReview(@RequestBody @Valid ReviewRequest dto, @PathVariable Long collectionId) {
-        log.info("collectionID for post review = {}", collectionId);
         return ApiResponse.ok(reviewService.postReview(dto, collectionId));
     }
 }

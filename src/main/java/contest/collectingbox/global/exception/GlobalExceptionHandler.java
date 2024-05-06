@@ -24,14 +24,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CollectingBoxException.class)
     public ResponseEntity<ErrorResponse> handleCollectingBoxException(CollectingBoxException e) {
         ErrorResponse errorResponse = ErrorResponse.from(e.getErrorCode());
-        log.error("exception message = {}", e.getMessage());
         return ResponseEntity.status(errorResponse.getStatus()).body(errorResponse);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> methodValidException(MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getFieldError().getDefaultMessage();
-        log.error("exception message = {}", e.getMessage());
         ErrorResponse errorResponse = ErrorResponse.from(INVALID_BEAN, message);
         return ResponseEntity.status(errorResponse.getStatus()).body(errorResponse);
 
@@ -40,14 +38,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(BAD_REQUEST)
     public ErrorResponse handleMissingParams(MissingServletRequestParameterException e) {
-        log.error("exception message = {}", e.getMessage());
         return ErrorResponse.from(MISSING_REQUEST_PARAM);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(BAD_REQUEST)
     public ErrorResponse handleMissingParams(MethodArgumentTypeMismatchException e) {
-        log.error("exception message = {}", e.getMessage());
         return ErrorResponse.from(MISMATCH_REQUEST_PARAM);
     }
 

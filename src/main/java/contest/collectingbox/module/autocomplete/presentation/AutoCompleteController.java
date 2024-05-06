@@ -23,7 +23,6 @@ public class AutoCompleteController {
     @Operation(summary = "검색어 자동 완성", description = "실시간 입력값에 따라 DB에 저장된 키워드를 가져옵니다.")
     @GetMapping
     public ApiResponse<AutoCompleteResponseDto> getAutoComplete(@RequestParam String query) {
-        log.info("query = {}", query);
         AutoCompleteResponseDto response = autoCompleteService.getAutoComplete(query);
         return ApiResponse.ok(response);
     }

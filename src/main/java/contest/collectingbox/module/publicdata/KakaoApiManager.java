@@ -31,8 +31,7 @@ public class KakaoApiManager {
 
             // 카카오 API 예외 처리
             if (response.getStatusCode() != HttpStatus.OK) {
-                log.error("Kakao API call failed status : {}", response.getStatusCode());
-                throw new RuntimeException("Kakao API fail exception");
+                throw new RuntimeException("Kakao API failed status = " + response.getStatusCode());
             }
 
             // 주소 정보 추출
@@ -51,8 +50,7 @@ public class KakaoApiManager {
 
             return AddressInfoMapper.jsonObjectToAddressInfoDto(document, tag);
         } catch (JSONException e) {
-            log.error("Error parsing JSON from Kakao API : {}", e.getMessage());
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error parsing JSON from Kakao API", e);
         }
     }
 

@@ -10,10 +10,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Getter
 @NoArgsConstructor
+@ToString
 public class ReviewRequest {
     @Schema(description = "리뷰 내용", example = "EXIST", allowableValues = {"EXIST", "DISAPPEAR"})
     @NotNull(message = "리뷰 내용을 입력하세요.")
