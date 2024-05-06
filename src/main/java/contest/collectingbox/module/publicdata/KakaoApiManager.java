@@ -25,7 +25,7 @@ public class KakaoApiManager {
     @Value("${kakao.api.key}")
     private String apiKey;
 
-    public AddressInfoResponse fetchAddressInfo(String query, Tag tag) {
+    public AddressInfoDto fetchAddressInfo(String query, Tag tag) {
         try {
             ResponseEntity<String> response = callKakaoAPI(query);
 
@@ -44,7 +44,11 @@ public class KakaoApiManager {
             }
 
             JSONObject document = documents.getJSONObject(0);
-            return makeAddressDto(document, tag);
+            if (document.isNull("address") || document.isNull("road_address")) {
+                return null;
+            }
+
+            return AddressInfoMapper.jsonObjectToAddressInfoDto(document, tag);
         } catch (JSONException e) {
             throw new RuntimeException("Error parsing JSON from Kakao API", e);
         }
@@ -59,66 +63,5 @@ public class KakaoApiManager {
                 .build().encode(UTF_8).toUri();
 
         return restTemplate.exchange(targetUrl, HttpMethod.GET, httpEntity, String.class);
-    }
-
-    private AddressInfoResponse makeAddressDto(JSONObject document, Tag tag) {
-        AddressInfoResponse.AddressInfoResponseBuilder builder = AddressInfoResponse.builder()
-                .longitude(document.getDouble("x"))
-                .latitude(document.getDouble("y"))
-                .tag(tag);
-
-        if (document.isNull("address")) {
-            return getResponseWithRoadAddress(document, tag, builder);
-        }
-
-        if (document.isNull("road_address")) {
-            return getResponseWithAddress(document, tag, builder);
-        }
-
-        return getResponse(document, tag, builder);
-    }
-
-    private AddressInfoResponse getResponseWithRoadAddress(JSONObject document,
-                                                           Tag tag,
-                                                           AddressInfoResponse.AddressInfoResponseBuilder builder) {
-        JSONObject roadAddress = document.getJSONObject("road_address");
-        return builder.name(getDetailName(tag, roadAddress.getString("building_name")))
-                .sido(roadAddress.getString("region_1depth_name"))
-                .sigungu(roadAddress.getString("region_2depth_name"))
-                .dong(roadAddress.getString("region_3depth_name"))
-                .roadName(roadAddress.getString("address_name"))
-                .build();
-    }
-
-    private AddressInfoResponse getResponseWithAddress(JSONObject document, Tag tag,
-                                                       AddressInfoResponse.AddressInfoResponseBuilder builder) {
-        JSONObject address = document.getJSONObject("address");
-        return builder.name(getDetailName(tag, ""))
-                .sido(address.getString("region_1depth_name"))
-                .sigungu(address.getString("region_2depth_name"))
-                .dong(address.getString("region_3depth_h_name"))
-                .streetNum(address.getString("address_name"))
-                .build();
-    }
-
-    private AddressInfoResponse getResponse(JSONObject document,
-                                            Tag tag,
-                                            AddressInfoResponse.AddressInfoResponseBuilder builder) {
-        JSONObject address = document.getJSONObject("address");
-        JSONObject roadAddress = document.getJSONObject("road_address");
-        return builder
-                .sido(address.getString("region_1depth_name"))
-                .sigungu(address.getString("region_2depth_name"))
-                .dong(address.getString("region_3depth_h_name"))
-                .name(getDetailName(tag, roadAddress.getString("building_name")))
-                .streetNum(address.getString("address_name"))
-                .roadName(roadAddress.getString("address_name"))
-                .build();
-    }
-
-    private String getDetailName(Tag tag, String buildingName) {
-        return buildingName.isEmpty() ?
-                (tag.name().equals("TRASH") ? tag.getLabel() : tag.getLabel() + " 수거함")
-                : buildingName + " 근처 수거함";
     }
 }

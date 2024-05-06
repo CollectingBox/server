@@ -4,6 +4,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.location.domain.DongInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -27,6 +28,7 @@ public class PublicDataService {
     private final PublicDataExtract publicDataExtract;
     private final KakaoApiManager kakaoApiManager;
     private final CollectingBoxRepository collectingBoxRepository;
+    private final DongInfoRepository dongInfoRepository;
 
     public void savePublicDataApiInfo(List<SavePublicDataApiInfoRequest> requests) {
         for (SavePublicDataApiInfoRequest request : requests) {
@@ -51,24 +53,24 @@ public class PublicDataService {
             }
 
             // 카카오 주소 검색 API 호출
-            AddressInfoResponse response = kakaoApiManager.fetchAddressInfo(query, tag);
+            AddressInfoDto addressInfo = kakaoApiManager.fetchAddressInfo(query, tag);
 
             // 카카오 주소 검색 API 응답 null 체크
-            if (response == null) {
+            if (addressInfo == null) {
                 continue;
             }
 
-            if (response.hasNull()) {
+            if (addressInfo.hasNull()) {
                 throw new RuntimeException("kakao API response has null");
             }
 
             // 카카오 주소 검색 API 응답 출력
-            log.info("query = {}, response = {}", query, response);
+            log.info("query = {}, response = {}", query, addressInfo);
 
             // insert DB
-            if (equals(response.getSigungu(), sigungu)) {
+            if (equals(addressInfo.getSigungu(), sigungu)) {
                 loadedDataCount++;
-                collectingBoxRepository.save(response.toEntity());
+                collectingBoxRepository.save(addressInfo.toCollectingBox(dongInfoRepository));
             }
         }
 
@@ -108,7 +110,7 @@ public class PublicDataService {
                 continue;
             }
 
-            AddressInfoResponse response = kakaoApiManager.fetchAddressInfo(query, tag);
+            AddressInfoDto response = kakaoApiManager.fetchAddressInfo(query, tag);
             log.info("query = {}, response = {}", query, response);
 
             if (response == null || response.hasNull() || response.hasEmptyValue()) {
@@ -117,7 +119,7 @@ public class PublicDataService {
 
             if (equals(response.getSigungu(), sigungu)) {
                 dataCount++;
-                collectingBoxRepository.save(response.toEntity());
+                collectingBoxRepository.save(response.toCollectingBox(dongInfoRepository));
             }
         }
 
