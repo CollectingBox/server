@@ -31,8 +31,7 @@ public class PublicDataExtract {
             }
         }
 
-        log.error("Not contains anything in {}", jsonObject);
-
+        log.warn("Not contains anything in {}", jsonObject);
         return null;
     }
 
@@ -49,7 +48,7 @@ public class PublicDataExtract {
                 }
             }
         }
-        log.error("No csv column name containing keywords, columnNames = {}", (Object) columnNames);
+        log.warn("No csv column name containing keywords, columnNames = {}", (Object) columnNames);
         return -1;
     }
 

@@ -59,7 +59,7 @@ public class PublicDataService {
             }
 
             if (response.hasNull()) {
-                throw new RuntimeException("null");
+                throw new RuntimeException("kakao API response has null");
             }
 
             // 카카오 주소 검색 API 응답 출력
@@ -88,8 +88,7 @@ public class PublicDataService {
             }
             return saveCsvPublicData(csvReader, columnIndex, request.getSigungu(), request.getTag());
         } catch (IOException | CsvValidationException e) {
-            log.error("Fail loading CSV file: {}", e.getMessage());
-            throw new RuntimeException(e);
+            throw new RuntimeException("failed to load CSV file", e);
         }
     }
 
