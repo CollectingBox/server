@@ -4,7 +4,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import contest.collectingbox.module.autocomplete.dto.AddressDto;
 import contest.collectingbox.module.autocomplete.dto.QAddressDto;
 import contest.collectingbox.module.location.domain.QDongInfo;
-import contest.collectingbox.module.location.domain.QLocation;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 
@@ -26,6 +25,5 @@ public class AutoCompleteRepositoryImpl implements AutoCompleteRepositoryCustom 
                 .orderBy(dongInfo.sigunguNm.asc(), dongInfo.dongNm.asc())
                 .limit(5)
                 .fetch();
-
     }
 }
