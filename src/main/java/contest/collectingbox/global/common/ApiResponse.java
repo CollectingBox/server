@@ -1,6 +1,7 @@
 package contest.collectingbox.global.common;
 
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -26,4 +27,12 @@ public class ApiResponse<T> {
         return new ApiResponse<>(OK, SUCCESS, data);
     }
 
+    @Override
+    public String toString() {
+        return "ApiResponse{" +
+                "code=" + code +
+                ", status=" + status +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }
