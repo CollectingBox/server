@@ -23,7 +23,7 @@ public class AutoCompleteRepositoryImpl implements AutoCompleteRepositoryCustom 
         return queryFactory
                 .selectDistinct(new QAddressDto(location.address.sigungu, location.address.dong))
                 .from(location)
-                .where(location.address.streetNum.contains(query))
+                .where(location.address.dong.contains(query).or(location.address.sigungu.contains(query)))
                 .orderBy(location.address.sigungu.asc(), location.address.dong.asc())
                 .limit(5)
                 .fetch();
