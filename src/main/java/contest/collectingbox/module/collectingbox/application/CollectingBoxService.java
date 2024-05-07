@@ -8,7 +8,8 @@ import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
-import contest.collectingbox.module.location.domain.LocationRepository;
+import contest.collectingbox.module.location.domain.DongInfo;
+import contest.collectingbox.module.location.domain.DongInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static contest.collectingbox.global.exception.ErrorCode.NOT_FOUND_COLLECTING_BOX;
@@ -25,7 +27,7 @@ import static contest.collectingbox.global.exception.ErrorCode.NOT_FOUND_COLLECT
 public class CollectingBoxService {
 
     private final CollectingBoxRepository collectingBoxRepository;
-    private final LocationRepository locationRepository;
+    private final DongInfoRepository dongInfoRepository;
 
     @Value("${collecting-box.search.radius.meter}")
     private int radius;
@@ -60,22 +62,19 @@ public class CollectingBoxService {
             throw new CollectingBoxException(ErrorCode.NOT_SELECTED_TAG);
         }
 
-        String dong = locationRepository.findDongByKeyword(query);
-
-        if (dong == null) {
-            return collectingBoxRepository.findAllBySigungu(query, toString(tags))
-                    .stream()
+        // 행정동명으로 검색
+        Optional<DongInfo> dongInfo = dongInfoRepository.findByDongNm(query);
+        if (dongInfo.isPresent()) {
+            List<CollectingBox> boxes = collectingBoxRepository.findAllByDongInfoAndTags(dongInfo.get(), tags);
+            return boxes.stream()
                     .map(CollectingBoxResponse::fromEntity)
                     .collect(Collectors.toList());
         }
 
-        return collectingBoxRepository.findAllByDong(dong, toString(tags))
-                .stream()
+        // 시군구명으로 검색
+        return dongInfoRepository.findAllBySigunguNm(query).stream()
+                .flatMap(info -> collectingBoxRepository.findAllByDongInfoAndTags(info, tags).stream())
                 .map(CollectingBoxResponse::fromEntity)
                 .collect(Collectors.toList());
-    }
-
-    private List<String> toString(List<Tag> tags) {
-        return tags.stream().map(Enum::name).collect(Collectors.toList());
     }
 }
