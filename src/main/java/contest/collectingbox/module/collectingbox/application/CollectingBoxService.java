@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static contest.collectingbox.global.exception.ErrorCode.NOT_FOUND_COLLECTING_BOX;
@@ -62,18 +61,33 @@ public class CollectingBoxService {
             throw new CollectingBoxException(ErrorCode.NOT_SELECTED_TAG);
         }
 
-        // 행정동명으로 검색
-        Optional<DongInfo> dongInfo = dongInfoRepository.findByDongNm(query);
-        if (dongInfo.isPresent()) {
-            List<CollectingBox> boxes = collectingBoxRepository.findAllByDongInfoAndTags(dongInfo.get(), tags);
-            return boxes.stream()
-                    .map(CollectingBoxResponse::fromEntity)
-                    .collect(Collectors.toList());
+        // '강남구'
+        if (query.endsWith("구")) {
+            return searchBySigunguNm(query, tags);
         }
 
-        // 시군구명으로 검색
+        String[] splitQuery = query.split(" ");
+
+        // '역삼1동'
+        if (splitQuery.length == 1) {
+            return searchByDongNm(query, tags);
+        }
+
+        // '강남구 역삼1동'
+        return searchByDongNm(splitQuery[1], tags);
+    }
+
+    private List<CollectingBoxResponse> searchBySigunguNm(String query, List<Tag> tags) {
         return dongInfoRepository.findAllBySigunguNm(query).stream()
-                .flatMap(info -> collectingBoxRepository.findAllByDongInfoAndTags(info, tags).stream())
+                .flatMap(dongInfo -> collectingBoxRepository.findAllByDongInfoAndTags(dongInfo, tags).stream())
+                .map(CollectingBoxResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    private List<CollectingBoxResponse> searchByDongNm(String dongNm, List<Tag> tags) {
+        DongInfo dongInfo = dongInfoRepository.findByDongNm(dongNm);
+        List<CollectingBox> boxes = collectingBoxRepository.findAllByDongInfoAndTags(dongInfo, tags);
+        return boxes.stream()
                 .map(CollectingBoxResponse::fromEntity)
                 .collect(Collectors.toList());
     }
