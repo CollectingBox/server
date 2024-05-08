@@ -48,10 +48,7 @@ public class CollectingBoxService {
 
     @Transactional(readOnly = true)
     public CollectingBoxDetailResponse findBoxDetailById(Long collectionId) {
-        CollectingBox box = collectingBoxRepository.findById(collectionId)
-                .orElseThrow(() -> new CollectingBoxException(
-                        NOT_FOUND_COLLECTING_BOX));
-        return collectingBoxRepository.findDetailById(box.getId());
+        return collectingBoxRepository.findDetailById(collectionId);
     }
 
     @Transactional(readOnly = true)

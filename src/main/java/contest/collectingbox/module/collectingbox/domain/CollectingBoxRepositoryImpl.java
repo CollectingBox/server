@@ -1,10 +1,12 @@
 package contest.collectingbox.module.collectingbox.domain;
 
+import static contest.collectingbox.global.exception.ErrorCode.NOT_FOUND_COLLECTING_BOX;
 import static contest.collectingbox.module.collectingbox.domain.QCollectingBox.collectingBox;
 import static contest.collectingbox.module.location.domain.QLocation.location;
 import static contest.collectingbox.module.review.domain.QReview.*;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.QCollectingBoxDetailResponse;
 import contest.collectingbox.module.review.dto.ReviewResponse;
@@ -33,6 +35,10 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
                 .where(collectingBox.id.eq(id))
                 .fetchOne();
 
+        if (response == null) {
+            throw new CollectingBoxException(NOT_FOUND_COLLECTING_BOX);
+        }
+
         List<ReviewResponse> reviews = queryFactory
                 .select(new QReviewResponse(review.tag.stringValue(), review.createdAt.stringValue()))
                 .from(review)
@@ -42,7 +48,7 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
                 .fetch();
 
         response.setReviews(reviews);
-
+        
         return response;
     }
 }
