@@ -22,10 +22,11 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
+import static contest.collectingbox.global.exception.ErrorCode.*;
 import static contest.collectingbox.module.collectingbox.domain.Tag.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,7 +64,8 @@ class CollectingBoxServiceTest {
                 .build();
 
         // when
-        when(collectingBoxRepository.findAllWithinArea(center, radius, tags)).thenReturn(Collections.singletonList(box));
+        when(collectingBoxRepository.findAllWithinArea(center, radius, tags)).thenReturn(
+                Collections.singletonList(box));
 
         List<CollectingBoxResponse> result =
                 collectingBoxService.findCollectingBoxesWithinArea(LATITUDE, LONGITUDE, tags);
@@ -76,7 +78,8 @@ class CollectingBoxServiceTest {
     @DisplayName("요청 파라미터로 넘어온 태그가 비어 있는 경우 예외 발생")
     void findCollectingBoxesWithinArea_Fail_ByTagIsEmpty() {
         // when, then
-        Assertions.assertThatThrownBy(() -> collectingBoxService.findCollectingBoxesWithinArea(LATITUDE, LONGITUDE, List.of()))
+        Assertions.assertThatThrownBy(
+                        () -> collectingBoxService.findCollectingBoxesWithinArea(LATITUDE, LONGITUDE, List.of()))
                 .isInstanceOf(CollectingBoxException.class)
                 .hasMessageContaining(ErrorCode.NOT_SELECTED_TAG.getMessage());
     }
@@ -93,10 +96,8 @@ class CollectingBoxServiceTest {
                 .modifiedDate("2024-04-12 00:00:00.000000")
                 .tag(CLOTHES)
                 .build();
-        CollectingBox box = CollectingBox.builder().id(collectionId).build();
 
         // when
-        when(collectingBoxRepository.findById(collectionId)).thenReturn(Optional.ofNullable(box));
         when(collectingBoxRepository.findDetailById(collectionId)).thenReturn(expectedResponse);
         CollectingBoxDetailResponse response = collectingBoxService.findBoxDetailById(collectionId);
 
@@ -104,4 +105,20 @@ class CollectingBoxServiceTest {
         assertThat(response).isEqualTo(expectedResponse);
         assertThat(response.getLocation()).isNull();
     }
+
+    @Test
+    @DisplayName("수거함 조회 시 id가 존재하지 않을 때 예외 발생")
+    void findBoxDetail_Fail_WhenBoxIdNotFound() {
+        // given
+        Long id = 100L;
+
+        // when
+        when(collectingBoxRepository.findDetailById(id))
+                .thenThrow(new CollectingBoxException(NOT_FOUND_COLLECTING_BOX));
+        // then
+        assertThatThrownBy(() -> collectingBoxService.findBoxDetailById(id))
+                .isInstanceOf(CollectingBoxException.class)
+                .hasMessageContaining(NOT_FOUND_COLLECTING_BOX.getMessage());
+    }
+
 }
