@@ -1,5 +1,6 @@
 package contest.collectingbox.module.collectingbox.domain;
 
+import contest.collectingbox.module.location.domain.DongInfo;
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,18 +17,7 @@ public interface CollectingBoxRepository extends JpaRepository<CollectingBox, Lo
                                           @Param("radius") int radius,
                                           @Param("tags") List<Tag> tags);
 
-
-    @Query(value = "select c.* from collecting_box as c " +
-            "join location as l on c.location_id = l.id " +
-            "where match (l.dong) against (:dong in natural language mode) and " +
-            "c.tag in (:tags)", nativeQuery = true)
-    List<CollectingBox> findAllByDong(@Param("dong") String dong,
-                                      @Param("tags") List<String> tags);
-
-    @Query(value = "select c.* from collecting_box as c " +
-            "join location as l on c.location_id = l.id " +
-            "where match(l.sigungu) against (:sigungu in natural language mode) and " +
-            "c.tag in (:tags)", nativeQuery = true)
-    List<CollectingBox> findAllBySigungu(@Param("sigungu") String sigungu,
-                                         @Param("tags") List<String> tags);
+    @Query("select c from CollectingBox c join c.location l where l.dongInfo = :dongInfo and c.tag in :tags")
+    List<CollectingBox> findAllByDongInfoAndTags(@Param("dongInfo") DongInfo dongInfo,
+                                                 @Param("tags") List<Tag> tags);
 }
