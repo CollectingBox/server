@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface CollectingBoxRepository extends JpaRepository<CollectingBox, Long>, CollectingBoxRepositoryCustom {
 
-    @Query("select c from CollectingBox c join c.location l " +
+    @Query("select c from CollectingBox c join fetch c.location l " +
             "where function('st_contains', function('st_buffer', :center, :radius), l.point) and " +
             "c.tag in :tags")
     List<CollectingBox> findAllWithinArea(@Param("center") Point center,
