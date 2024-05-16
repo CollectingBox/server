@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,8 +17,8 @@ public class AutoCompleteService {
     private final AutoCompleteRepository autoCompleteRepository;
 
     public AutoCompleteResponseDto getAutoComplete(String query) {
-        List<String> items = query.isEmpty() ? new ArrayList<>() :
-                autoCompleteRepository.findAutoComplete(query)
+        List<String> items =
+                autoCompleteRepository.getAutoComplete(query)
                         .stream()
                         .map(this::formatAddress)
                         .collect(Collectors.toList());

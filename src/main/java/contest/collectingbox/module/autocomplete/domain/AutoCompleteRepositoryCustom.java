@@ -4,5 +4,5 @@ import contest.collectingbox.module.autocomplete.dto.AddressDto;
 import java.util.List;
 
 public interface AutoCompleteRepositoryCustom {
-    List<AddressDto> findAutoComplete(String query);
+    List<AddressDto> getAutoComplete(String query);
 }
