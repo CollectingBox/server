@@ -36,7 +36,7 @@ public class AutoCompleteRepositoryImpl implements AutoCompleteRepositoryCustom 
         }
         System.out.println(2);
         return dongInfo.sigunguNm.contains(split[0])
-                .and(dongInfo.dongNm.contains(split[1]));
+                .and(dongInfo.dongNm.contains(split[split.length-1]));
 
     }
 }
