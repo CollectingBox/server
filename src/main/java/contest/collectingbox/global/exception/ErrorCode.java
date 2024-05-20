@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
@@ -23,6 +22,7 @@ public enum ErrorCode {
 
     // 임시
     NOT_FOUND_TAG(NOT_FOUND, "해당 이름과 일치하는 수거함 태그가 없습니다.");
+
     // 409
 
     // 500
