@@ -1,20 +1,15 @@
 package contest.collectingbox.global.exception;
 
-
-
+import contest.collectingbox.global.common.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import static contest.collectingbox.global.exception.ErrorCode.INVALID_BEAN;
-import static contest.collectingbox.global.exception.ErrorCode.MISMATCH_REQUEST_PARAM;
-import static contest.collectingbox.global.exception.ErrorCode.MISSING_REQUEST_PARAM;
+import static contest.collectingbox.global.exception.ErrorCode.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Slf4j
@@ -22,29 +17,25 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CollectingBoxException.class)
-    public ResponseEntity<ErrorResponse> handleCollectingBoxException(CollectingBoxException e) {
-        ErrorResponse errorResponse = ErrorResponse.from(e.getErrorCode());
-        return ResponseEntity.status(errorResponse.getStatus()).body(errorResponse);
+    public ApiResponse<Object> handleCollectingBoxException(CollectingBoxException e) {
+        return ApiResponse.error(e.errorCode(), e.message());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> methodValidException(MethodArgumentNotValidException e) {
+    public ApiResponse<Object> methodValidException(MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getFieldError().getDefaultMessage();
-        ErrorResponse errorResponse = ErrorResponse.from(INVALID_BEAN, message);
-        return ResponseEntity.status(errorResponse.getStatus()).body(errorResponse);
-
+        return ApiResponse.error(INVALID_BEAN, message);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ErrorResponse handleMissingParams(MissingServletRequestParameterException e) {
-        return ErrorResponse.from(MISSING_REQUEST_PARAM);
+    public ApiResponse<Object> handleMissingParams(MissingServletRequestParameterException e) {
+        return ApiResponse.error(MISSING_REQUEST_PARAM, MISSING_REQUEST_PARAM.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ErrorResponse handleMissingParams(MethodArgumentTypeMismatchException e) {
-        return ErrorResponse.from(MISMATCH_REQUEST_PARAM);
+    public ApiResponse<Object> handleMissingParams(MethodArgumentTypeMismatchException e) {
+        return ApiResponse.error(MISMATCH_REQUEST_PARAM, MISSING_REQUEST_PARAM.getMessage());
     }
-
 }
