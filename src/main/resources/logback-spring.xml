@@ -17,10 +17,7 @@
     <!--dev-->
     <springProfile name="dev">
         <include resource="logback/file-info-appender.xml"/>
-        <include resource="logback/console-appender.xml"/>
-
-        <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
+        <root level="WARN">
             <appender-ref ref="FILE-INFO"/>
         </root>
     </springProfile>
