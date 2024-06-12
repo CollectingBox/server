@@ -6,7 +6,6 @@ import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +19,7 @@ public class CollectingBoxController {
 
     private final CollectingBoxService collectingBoxService;
 
-    @Operation(summary = "수거함 목록 조회", description = "위도와 경도를 기준으로 200m 반경에 위치한 수거함 목록을 조회합니다.")
+    @Operation(summary = "주변 수거함 목록 조회", description = "위도와 경도를 기준으로 주변 600m 반경에 위치한 수거함 목록을 조회합니다.")
     @GetMapping
     public ApiResponse<List<CollectingBoxResponse>> findCollectingBoxesWithinArea(@RequestParam final Double latitude,
                                                                                   @RequestParam final Double longitude,
