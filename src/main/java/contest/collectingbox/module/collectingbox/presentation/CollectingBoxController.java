@@ -3,6 +3,7 @@ package contest.collectingbox.module.collectingbox.presentation;
 import contest.collectingbox.global.common.ApiResponse;
 import contest.collectingbox.module.collectingbox.application.CollectingBoxService;
 import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.collectingbox.domain.Tags;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,14 +25,14 @@ public class CollectingBoxController {
     @GetMapping
     public ApiResponse<List<CollectingBoxResponse>> findCollectingBoxesWithinArea(@RequestParam final Double latitude,
                                                                                   @RequestParam final Double longitude,
-                                                                                  @RequestParam final List<Tag> tags) {
+                                                                                  final Tags tags) {
         return ApiResponse.ok(collectingBoxService.findCollectingBoxesWithinArea(latitude, longitude, tags));
     }
 
     @Operation(summary = "지역별 수거함 검색", description = "구/동 단위로 검색한 주소에 위치한 수거함 목록을 조회합니다.")
     @GetMapping("/search")
     public ApiResponse<List<CollectingBoxResponse>> searchCollectingBoxes(@RequestParam final String query,
-                                                                          @RequestParam final List<Tag> tags) {
+                                                                          final Tags tags) {
         return ApiResponse.ok(collectingBoxService.searchCollectingBoxes(query, tags));
     }
 
