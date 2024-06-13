@@ -32,9 +32,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CollectingBoxServiceTest {
 
-    private final double LATITUDE = 37.4888953606578;
-    private final double LONGITUDE = 126.901185398046;
-
     private Point center;
 
     @Value("${collecting-box.search.radius.meter}")
@@ -48,7 +45,7 @@ class CollectingBoxServiceTest {
 
     @BeforeEach
     void setUp() {
-        center = GeometryUtil.toPoint(LONGITUDE, LATITUDE);
+        center = GeometryUtil.toPoint(126.901185398046, 37.4888953606578);
     }
 
     @Test
@@ -68,7 +65,7 @@ class CollectingBoxServiceTest {
                 Collections.singletonList(box));
 
         List<CollectingBoxResponse> result =
-                collectingBoxService.findCollectingBoxesWithinArea(LATITUDE, LONGITUDE, tags);
+                collectingBoxService.findCollectingBoxesWithinArea(center, tags);
 
         // then
         assertThat(result.get(0).getId()).isEqualTo(box.getId());
@@ -79,7 +76,7 @@ class CollectingBoxServiceTest {
     void findCollectingBoxesWithinArea_Fail_ByTagIsEmpty() {
         // when, then
         Assertions.assertThatThrownBy(
-                        () -> collectingBoxService.findCollectingBoxesWithinArea(LATITUDE, LONGITUDE, new Tags(List.of())))
+                        () -> collectingBoxService.findCollectingBoxesWithinArea(center, new Tags(List.of())))
                 .isInstanceOf(CollectingBoxException.class)
                 .hasMessageContaining(ErrorCode.NOT_SELECTED_TAG.getMessage());
     }

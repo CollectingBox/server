@@ -1,6 +1,5 @@
 package contest.collectingbox.module.collectingbox.application;
 
-import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
 import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
@@ -29,10 +28,8 @@ public class CollectingBoxService {
     private int radius;
 
     @Transactional(readOnly = true)
-    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(final Double latitude,
-                                                                     final Double longitude,
+    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(final Point center,
                                                                      final Tags tags) {
-        Point center = GeometryUtil.toPoint(longitude, latitude);
         return collectingBoxRepository.findAllWithinArea(center, radius, tags.toUnmodifiableList())
                 .stream()
                 .map(CollectingBoxResponse::fromEntity)
