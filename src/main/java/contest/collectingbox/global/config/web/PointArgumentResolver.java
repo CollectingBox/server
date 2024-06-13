@@ -1,10 +1,7 @@
 package contest.collectingbox.global.config.web;
 
-import contest.collectingbox.global.exception.CollectingBoxException;
-import contest.collectingbox.global.exception.ErrorCode;
 import contest.collectingbox.global.utils.GeometryUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.coyote.BadRequestException;
 import org.locationtech.jts.geom.Point;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.MissingServletRequestParameterException;
