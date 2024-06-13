@@ -16,6 +16,7 @@ public enum ErrorCode {
     INVALID_BEAN(BAD_REQUEST, "유효하지 않은 데이터입니다."),
     MISSING_REQUEST_PARAM(BAD_REQUEST, "'%s' 타입의 '%s' 요청 파라미터가 존재하지 않습니다."),
     MISMATCH_REQUEST_PARAM(BAD_REQUEST, "요청 파라미터가 유효하지 않습니다."),
+    ILLEGAL_ARGUMENT(BAD_REQUEST, "유효하지 않은 값입니다."),
 
     // 404
     NOT_FOUND_COLLECTING_BOX(NOT_FOUND, "해당 수거함이 존재하지 않습니다."),

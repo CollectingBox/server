@@ -39,4 +39,10 @@ public class GlobalExceptionHandler {
     public ApiResponse<Object> handleMissingParams(MethodArgumentTypeMismatchException e) {
         return ApiResponse.error(MISMATCH_REQUEST_PARAM, MISSING_REQUEST_PARAM.getMessage());
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(BAD_REQUEST)
+    public ApiResponse<Object> handleIllegalArgument(IllegalArgumentException e) {
+        return ApiResponse.error(ILLEGAL_ARGUMENT, e.getMessage());
+    }
 }

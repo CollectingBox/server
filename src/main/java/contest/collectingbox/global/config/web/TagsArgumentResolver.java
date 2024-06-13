@@ -27,9 +27,13 @@ public class TagsArgumentResolver implements HandlerMethodArgumentResolver {
             throw new MissingServletRequestParameterException("tags", "Tags");
         }
 
-        List<Tag> tags = Arrays.stream(request.getParameter("tags").split(","))
-                .map(Tag::valueOf)
-                .toList();
-        return new Tags(tags);
+        try {
+            List<Tag> tags = Arrays.stream(request.getParameter("tags").split(","))
+                    .map(Tag::valueOf)
+                    .toList();
+            return new Tags(tags);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid parameter value for tags");
+        }
     }
 }
