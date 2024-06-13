@@ -30,7 +30,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(BAD_REQUEST)
     public ApiResponse<Object> handleMissingParams(MissingServletRequestParameterException e) {
-        return ApiResponse.error(MISSING_REQUEST_PARAM, MISSING_REQUEST_PARAM.getMessage());
+        return ApiResponse.error(MISSING_REQUEST_PARAM,
+                String.format(MISSING_REQUEST_PARAM.getMessage(), e.getParameterType(), e.getParameterName()));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
