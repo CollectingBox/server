@@ -1,20 +1,22 @@
-package contest.collectingbox.module.collectingbox.domain;
-
-import static contest.collectingbox.global.exception.ErrorCode.NOT_FOUND_COLLECTING_BOX;
-import static contest.collectingbox.module.collectingbox.domain.QCollectingBox.collectingBox;
-import static contest.collectingbox.module.location.domain.QLocation.location;
-import static contest.collectingbox.module.review.domain.QReview.*;
+package contest.collectingbox.module.collectingbox.domain.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.QCollectingBoxDetailResponse;
-import contest.collectingbox.module.review.dto.ReviewResponse;
 import contest.collectingbox.module.review.dto.QReviewResponse;
+import contest.collectingbox.module.review.dto.ReviewResponse;
 import jakarta.persistence.EntityManager;
+
 import java.util.List;
 
+import static contest.collectingbox.global.exception.ErrorCode.NOT_FOUND_COLLECTING_BOX;
+import static contest.collectingbox.module.collectingbox.domain.QCollectingBox.collectingBox;
+import static contest.collectingbox.module.location.domain.QLocation.location;
+import static contest.collectingbox.module.review.domain.QReview.review;
+
 public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCustom {
+
     private final JPAQueryFactory queryFactory;
 
     public CollectingBoxRepositoryImpl(EntityManager em) {
@@ -23,7 +25,6 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
 
     @Override
     public CollectingBoxDetailResponse findDetailById(Long id) {
-
         CollectingBoxDetailResponse response = queryFactory.select(new QCollectingBoxDetailResponse(
                         location.point,
                         location.name, location.roadName,
@@ -48,7 +49,7 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
                 .fetch();
 
         response.setReviews(reviews);
-        
+
         return response;
     }
 }

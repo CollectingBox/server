@@ -1,5 +1,7 @@
-package contest.collectingbox.module.collectingbox.domain;
+package contest.collectingbox.module.collectingbox.domain.repository;
 
+import contest.collectingbox.module.collectingbox.domain.CollectingBox;
+import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.location.domain.DongInfo;
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;

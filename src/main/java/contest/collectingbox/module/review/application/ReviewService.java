@@ -4,7 +4,7 @@ import static contest.collectingbox.global.exception.ErrorCode.NOT_FOUND_COLLECT
 
 import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
-import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
+import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
 import contest.collectingbox.module.review.domain.ReviewRepository;
 import contest.collectingbox.module.review.dto.ReviewRequest;
 import lombok.RequiredArgsConstructor;

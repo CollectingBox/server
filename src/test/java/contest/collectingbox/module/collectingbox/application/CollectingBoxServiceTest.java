@@ -4,7 +4,7 @@ import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.global.exception.ErrorCode;
 import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
-import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
+import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;

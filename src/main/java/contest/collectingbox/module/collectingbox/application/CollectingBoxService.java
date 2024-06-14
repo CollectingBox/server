@@ -4,8 +4,8 @@ import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.global.exception.ErrorCode;
 import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
-import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import contest.collectingbox.module.location.domain.DongInfo;
@@ -18,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static contest.collectingbox.global.exception.ErrorCode.NOT_FOUND_COLLECTING_BOX;
 
 @Service
 @RequiredArgsConstructor
