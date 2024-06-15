@@ -64,11 +64,11 @@ class CollectingBoxServiceTest {
                 .build();
 
         // when
-        when(collectingBoxRepository.findAllWithinArea(center, radius, tags)).thenReturn(
-                Collections.singletonList(box));
+        when(collectingBoxRepository.findAllWithinArea(LONGITUDE, LATITUDE, radius, tags))
+                .thenReturn(List.of(new CollectingBoxResponse(box.getId(), LONGITUDE, LATITUDE, CLOTHES)));
 
         List<CollectingBoxResponse> result =
-                collectingBoxService.findCollectingBoxesWithinArea(LATITUDE, LONGITUDE, tags);
+                collectingBoxService.findCollectingBoxesWithinArea(LONGITUDE, LATITUDE, tags);
 
         // then
         assertThat(result.get(0).getId()).isEqualTo(box.getId());
