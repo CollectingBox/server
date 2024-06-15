@@ -2,7 +2,6 @@ package contest.collectingbox.module.collectingbox.application;
 
 import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.global.exception.ErrorCode;
-import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
@@ -11,7 +10,6 @@ import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import contest.collectingbox.module.location.domain.DongInfo;
 import contest.collectingbox.module.location.domain.DongInfoRepository;
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,19 +28,14 @@ public class CollectingBoxService {
     private int radius;
 
     @Transactional(readOnly = true)
-    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(final Double latitude,
-                                                                     final Double longitude,
+    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(final double longitude,
+                                                                     final double latitude,
                                                                      final List<Tag> tags) {
         if (tags.isEmpty()) {
             throw new CollectingBoxException(ErrorCode.NOT_SELECTED_TAG);
         }
 
-        Point center = GeometryUtil.toPoint(longitude, latitude);
-
-        return collectingBoxRepository.findAllWithinArea(center, radius, tags)
-                .stream()
-                .map(CollectingBoxResponse::fromEntity)
-                .collect(Collectors.toList());
+        return collectingBoxRepository.findAllWithinArea(longitude, latitude, radius, tags);
     }
 
     @Transactional(readOnly = true)

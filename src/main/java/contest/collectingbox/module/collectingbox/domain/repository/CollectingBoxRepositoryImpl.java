@@ -1,12 +1,19 @@
 package contest.collectingbox.module.collectingbox.domain.repository;
 
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.querydsl.spatial.locationtech.jts.JTSGeometryExpressions;
 import contest.collectingbox.global.exception.CollectingBoxException;
+import contest.collectingbox.global.utils.GeometryUtil;
+import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
+import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import contest.collectingbox.module.collectingbox.dto.QCollectingBoxDetailResponse;
+import contest.collectingbox.module.collectingbox.dto.QCollectingBoxResponse;
 import contest.collectingbox.module.review.dto.QReviewResponse;
 import contest.collectingbox.module.review.dto.ReviewResponse;
 import jakarta.persistence.EntityManager;
+import org.locationtech.jts.geom.Point;
 
 import java.util.List;
 
@@ -21,6 +28,23 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
 
     public CollectingBoxRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public List<CollectingBoxResponse> findAllWithinArea(double longitude, double latitude, int radius, List<Tag> tags) {
+        Point centerPoint = GeometryUtil.toPoint(longitude, latitude);
+        return queryFactory
+                .select(new QCollectingBoxResponse(
+                        collectingBox.id,
+                        Expressions.stringTemplate("function('st_x', {0})", location.point).castToNum(double.class),
+                        Expressions.stringTemplate("function('st_y', {0})", location.point).castToNum(double.class),
+                        collectingBox.tag
+                ))
+                .from(collectingBox)
+                .join(collectingBox.location, location)
+                .where(JTSGeometryExpressions.asJTSGeometry(centerPoint).buffer(radius).contains(location.point),
+                        collectingBox.tag.in(tags))
+                .fetch();
     }
 
     @Override
