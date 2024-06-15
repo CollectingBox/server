@@ -21,10 +21,10 @@ public class CollectingBoxController {
 
     @Operation(summary = "주변 수거함 목록 조회", description = "위도와 경도를 기준으로 주변 600m 반경에 위치한 수거함 목록을 조회합니다.")
     @GetMapping
-    public ApiResponse<List<CollectingBoxResponse>> findCollectingBoxesWithinArea(@RequestParam final Double latitude,
-                                                                                  @RequestParam final Double longitude,
+    public ApiResponse<List<CollectingBoxResponse>> findCollectingBoxesWithinArea(@RequestParam final double longitude,
+                                                                                  @RequestParam final double latitude,
                                                                                   @RequestParam final List<Tag> tags) {
-        return ApiResponse.ok(collectingBoxService.findCollectingBoxesWithinArea(latitude, longitude, tags));
+        return ApiResponse.ok(collectingBoxService.findCollectingBoxesWithinArea(longitude, latitude, tags));
     }
 
     @Operation(summary = "지역별 수거함 검색", description = "구/동 단위로 검색한 주소에 위치한 수거함 목록을 조회합니다.")
