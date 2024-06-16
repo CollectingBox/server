@@ -36,8 +36,10 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
         return queryFactory
                 .select(new QCollectingBoxResponse(
                         collectingBox.id,
-                        Expressions.stringTemplate("function('st_x', {0})", location.point).castToNum(double.class),
-                        Expressions.stringTemplate("function('st_y', {0})", location.point).castToNum(double.class),
+                        Expressions.stringTemplate("function('st_longitude', {0})", location.point)
+                                .castToNum(double.class),
+                        Expressions.stringTemplate("function('st_latitude', {0})", location.point)
+                                .castToNum(double.class),
                         collectingBox.tag
                 ))
                 .from(collectingBox)
