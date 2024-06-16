@@ -29,10 +29,10 @@ public class CollectingBoxResponse {
     private Tag tag;
 
     @QueryProjection
-    public CollectingBoxResponse(Long id, double x, double y, Tag tag) {
+    public CollectingBoxResponse(Long id, double longitude, double latitude, Tag tag) {
         this.id = id;
-        this.longitude = x;
-        this.latitude = y;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.tag = tag;
     }
 
