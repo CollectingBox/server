@@ -10,6 +10,7 @@ import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailRespons
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import contest.collectingbox.module.collectingbox.dto.QCollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.QCollectingBoxResponse;
+import contest.collectingbox.module.location.domain.GeoPoint;
 import contest.collectingbox.module.review.dto.QReviewResponse;
 import contest.collectingbox.module.review.dto.ReviewResponse;
 import jakarta.persistence.EntityManager;
@@ -31,8 +32,8 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
     }
 
     @Override
-    public List<CollectingBoxResponse> findAllWithinArea(double longitude, double latitude, int radius, Tags tags) {
-        Point centerPoint = GeometryUtil.toPoint(longitude, latitude);
+    public List<CollectingBoxResponse> findAllWithinArea(GeoPoint center, int radius, Tags tags) {
+        Point centerPoint = GeometryUtil.toPoint(center.getLongitude(), center.getLatitude());
         return queryFactory
                 .select(new QCollectingBoxResponse(
                         collectingBox.id,

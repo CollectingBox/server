@@ -7,6 +7,7 @@ import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailRespons
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import contest.collectingbox.module.location.domain.DongInfo;
 import contest.collectingbox.module.location.domain.DongInfoRepository;
+import contest.collectingbox.module.location.domain.GeoPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,10 +27,8 @@ public class CollectingBoxService {
     private int radius;
 
     @Transactional(readOnly = true)
-    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(final double longitude,
-                                                                     final double latitude,
-                                                                     final Tags tags) {
-        return collectingBoxRepository.findAllWithinArea(longitude, latitude, radius, tags);
+    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(final GeoPoint center, final Tags tags) {
+        return collectingBoxRepository.findAllWithinArea(center, radius, tags);
     }
 
     @Transactional(readOnly = true)
