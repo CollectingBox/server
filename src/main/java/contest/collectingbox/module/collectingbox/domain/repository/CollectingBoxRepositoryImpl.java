@@ -5,7 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.spatial.locationtech.jts.JTSGeometryExpressions;
 import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.global.utils.GeometryUtil;
-import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.collectingbox.domain.Tags;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import contest.collectingbox.module.collectingbox.dto.QCollectingBoxDetailResponse;
@@ -31,7 +31,7 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
     }
 
     @Override
-    public List<CollectingBoxResponse> findAllWithinArea(double longitude, double latitude, int radius, List<Tag> tags) {
+    public List<CollectingBoxResponse> findAllWithinArea(double longitude, double latitude, int radius, Tags tags) {
         Point centerPoint = GeometryUtil.toPoint(longitude, latitude);
         return queryFactory
                 .select(new QCollectingBoxResponse(
@@ -45,7 +45,7 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
                 .from(collectingBox)
                 .join(collectingBox.location, location)
                 .where(JTSGeometryExpressions.asJTSGeometry(centerPoint).buffer(radius).contains(location.point),
-                        collectingBox.tag.in(tags))
+                        collectingBox.tag.in(tags.getTags()))
                 .fetch();
     }
 
