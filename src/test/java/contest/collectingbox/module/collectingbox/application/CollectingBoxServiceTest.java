@@ -4,10 +4,12 @@ import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.global.exception.ErrorCode;
 import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
-import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.collectingbox.domain.Tags;
+import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
+import contest.collectingbox.module.location.domain.GeoPoint;
 import contest.collectingbox.module.location.domain.Location;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,10 +22,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.Collections;
 import java.util.List;
 
-import static contest.collectingbox.global.exception.ErrorCode.*;
+import static contest.collectingbox.global.exception.ErrorCode.NOT_FOUND_COLLECTING_BOX;
 import static contest.collectingbox.module.collectingbox.domain.Tag.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -32,13 +33,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CollectingBoxServiceTest {
 
-    private final double LATITUDE = 37.4888953606578;
-    private final double LONGITUDE = 126.901185398046;
-
-    private Point center;
-
     @Value("${collecting-box.search.radius.meter}")
     private int radius;
+
+    private GeoPoint center;
 
     @InjectMocks
     private CollectingBoxService collectingBoxService;
@@ -48,14 +46,14 @@ class CollectingBoxServiceTest {
 
     @BeforeEach
     void setUp() {
-        center = GeometryUtil.toPoint(LONGITUDE, LATITUDE);
+        center = new GeoPoint(126.901185398046, 37.4888953606578);
     }
 
     @Test
     @DisplayName("위도와 경도를 기준으로 특정 반경에 위치한 수거함 목록 조회 성공")
     void findCollectingBoxesWithinArea_Success_withinArea() {
         // given
-        List<Tag> tags = List.of(CLOTHES, LAMP_BATTERY, MEDICINE, TRASH);
+        Tags tags = new Tags(List.of(CLOTHES, LAMP_BATTERY, MEDICINE, TRASH));
 
         CollectingBox box = CollectingBox.builder()
                 .id(1L)
@@ -64,11 +62,12 @@ class CollectingBoxServiceTest {
                 .build();
 
         // when
-        when(collectingBoxRepository.findAllWithinArea(LONGITUDE, LATITUDE, radius, tags))
-                .thenReturn(List.of(new CollectingBoxResponse(box.getId(), LONGITUDE, LATITUDE, CLOTHES)));
+        when(collectingBoxRepository.findAllWithinArea(center, radius, tags))
+                .thenReturn(List.of(
+                        new CollectingBoxResponse(box.getId(), center.getLongitude(), center.getLatitude(), CLOTHES)));
 
         List<CollectingBoxResponse> result =
-                collectingBoxService.findCollectingBoxesWithinArea(LONGITUDE, LATITUDE, tags);
+                collectingBoxService.findCollectingBoxesWithinArea(center, tags);
 
         // then
         assertThat(result.get(0).getId()).isEqualTo(box.getId());
@@ -79,7 +78,7 @@ class CollectingBoxServiceTest {
     void findCollectingBoxesWithinArea_Fail_ByTagIsEmpty() {
         // when, then
         Assertions.assertThatThrownBy(
-                        () -> collectingBoxService.findCollectingBoxesWithinArea(LATITUDE, LONGITUDE, List.of()))
+                        () -> collectingBoxService.findCollectingBoxesWithinArea(center, new Tags(List.of())))
                 .isInstanceOf(CollectingBoxException.class)
                 .hasMessageContaining(ErrorCode.NOT_SELECTED_TAG.getMessage());
     }
