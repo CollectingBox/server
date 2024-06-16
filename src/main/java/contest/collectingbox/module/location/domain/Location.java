@@ -24,14 +24,14 @@ public class Location extends BaseTimeEntity {
     private String roadName;
     private String streetNum;
 
-    @Column(columnDefinition = "point SRID 4326")
+    @Column(columnDefinition = "point")
     private Point point;
-
-    public double latitude() {
-        return point.getY();
-    }
 
     public double longitude() {
         return point.getX();
+    }
+
+    public double latitude() {
+        return point.getY();
     }
 }
