@@ -10,10 +10,8 @@ import org.locationtech.jts.geom.PrecisionModel;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GeometryUtil {
 
-    private static final int SRID = 4326;
-
     public static Point toPoint(double longitude, double latitude) {
-        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), SRID);
+        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel());
         return geometryFactory.createPoint(new Coordinate(longitude, latitude));
     }
 }
