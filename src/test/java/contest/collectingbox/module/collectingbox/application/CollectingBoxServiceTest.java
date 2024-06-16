@@ -4,7 +4,7 @@ import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.global.exception.ErrorCode;
 import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
-import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
+import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
@@ -64,11 +64,11 @@ class CollectingBoxServiceTest {
                 .build();
 
         // when
-        when(collectingBoxRepository.findAllWithinArea(center, radius, tags)).thenReturn(
-                Collections.singletonList(box));
+        when(collectingBoxRepository.findAllWithinArea(LONGITUDE, LATITUDE, radius, tags))
+                .thenReturn(List.of(new CollectingBoxResponse(box.getId(), LONGITUDE, LATITUDE, CLOTHES)));
 
         List<CollectingBoxResponse> result =
-                collectingBoxService.findCollectingBoxesWithinArea(LATITUDE, LONGITUDE, tags);
+                collectingBoxService.findCollectingBoxesWithinArea(LONGITUDE, LATITUDE, tags);
 
         // then
         assertThat(result.get(0).getId()).isEqualTo(box.getId());
