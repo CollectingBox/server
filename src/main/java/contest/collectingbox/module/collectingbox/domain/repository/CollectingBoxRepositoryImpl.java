@@ -5,11 +5,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.spatial.locationtech.jts.JTSGeometryExpressions;
 import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.global.utils.GeometryUtil;
-import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.collectingbox.domain.Tags;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import contest.collectingbox.module.collectingbox.dto.QCollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.QCollectingBoxResponse;
+import contest.collectingbox.module.location.domain.GeoPoint;
 import contest.collectingbox.module.review.dto.QReviewResponse;
 import contest.collectingbox.module.review.dto.ReviewResponse;
 import jakarta.persistence.EntityManager;
@@ -31,8 +32,8 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
     }
 
     @Override
-    public List<CollectingBoxResponse> findAllWithinArea(double longitude, double latitude, int radius, List<Tag> tags) {
-        Point centerPoint = GeometryUtil.toPoint(longitude, latitude);
+    public List<CollectingBoxResponse> findAllWithinArea(GeoPoint center, int radius, Tags tags) {
+        Point centerPoint = GeometryUtil.toPoint(center.getLongitude(), center.getLatitude());
         return queryFactory
                 .select(new QCollectingBoxResponse(
                         collectingBox.id,
@@ -45,7 +46,7 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
                 .from(collectingBox)
                 .join(collectingBox.location, location)
                 .where(JTSGeometryExpressions.asJTSGeometry(centerPoint).buffer(radius).contains(location.point),
-                        collectingBox.tag.in(tags))
+                        collectingBox.tag.in(tags.getTags()))
                 .fetch();
     }
 

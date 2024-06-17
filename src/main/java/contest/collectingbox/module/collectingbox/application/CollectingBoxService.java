@@ -1,14 +1,13 @@
 package contest.collectingbox.module.collectingbox.application;
 
-import contest.collectingbox.global.exception.CollectingBoxException;
-import contest.collectingbox.global.exception.ErrorCode;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
-import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.collectingbox.domain.Tags;
 import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import contest.collectingbox.module.location.domain.DongInfo;
 import contest.collectingbox.module.location.domain.DongInfoRepository;
+import contest.collectingbox.module.location.domain.GeoPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,14 +27,8 @@ public class CollectingBoxService {
     private int radius;
 
     @Transactional(readOnly = true)
-    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(final double longitude,
-                                                                     final double latitude,
-                                                                     final List<Tag> tags) {
-        if (tags.isEmpty()) {
-            throw new CollectingBoxException(ErrorCode.NOT_SELECTED_TAG);
-        }
-
-        return collectingBoxRepository.findAllWithinArea(longitude, latitude, radius, tags);
+    public List<CollectingBoxResponse> findCollectingBoxesWithinArea(final GeoPoint center, final Tags tags) {
+        return collectingBoxRepository.findAllWithinArea(center, radius, tags);
     }
 
     @Transactional(readOnly = true)
@@ -44,11 +37,7 @@ public class CollectingBoxService {
     }
 
     @Transactional(readOnly = true)
-    public List<CollectingBoxResponse> searchCollectingBoxes(final String query, final List<Tag> tags) {
-        if (tags.isEmpty()) {
-            throw new CollectingBoxException(ErrorCode.NOT_SELECTED_TAG);
-        }
-
+    public List<CollectingBoxResponse> searchCollectingBoxes(final String query, final Tags tags) {
         // '강남구'
         if (query.endsWith("구")) {
             return searchBySigunguNm(query, tags);
@@ -65,16 +54,17 @@ public class CollectingBoxService {
         return searchByDongNm(splitQuery[1], tags);
     }
 
-    private List<CollectingBoxResponse> searchBySigunguNm(String query, List<Tag> tags) {
+    private List<CollectingBoxResponse> searchBySigunguNm(String query, Tags tags) {
         return dongInfoRepository.findAllBySigunguNm(query).stream()
-                .flatMap(dongInfo -> collectingBoxRepository.findAllByDongInfoAndTags(dongInfo, tags).stream())
+                .flatMap(dongInfo ->
+                        collectingBoxRepository.findAllByDongInfoAndTags(dongInfo, tags.getTags()).stream())
                 .map(CollectingBoxResponse::fromEntity)
                 .collect(Collectors.toList());
     }
 
-    private List<CollectingBoxResponse> searchByDongNm(String dongNm, List<Tag> tags) {
+    private List<CollectingBoxResponse> searchByDongNm(String dongNm, Tags tags) {
         DongInfo dongInfo = dongInfoRepository.findByDongNm(dongNm);
-        List<CollectingBox> boxes = collectingBoxRepository.findAllByDongInfoAndTags(dongInfo, tags);
+        List<CollectingBox> boxes = collectingBoxRepository.findAllByDongInfoAndTags(dongInfo, tags.getTags());
         return boxes.stream()
                 .map(CollectingBoxResponse::fromEntity)
                 .collect(Collectors.toList());
