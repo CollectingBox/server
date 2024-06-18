@@ -1,6 +1,5 @@
 package contest.collectingbox.module.location.domain;
 
-import contest.collectingbox.global.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
