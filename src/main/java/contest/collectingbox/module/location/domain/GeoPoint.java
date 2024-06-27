@@ -1,7 +1,6 @@
 package contest.collectingbox.module.location.domain;
 
 import contest.collectingbox.global.exception.CollectingBoxException;
-import contest.collectingbox.global.exception.ErrorCode;
 import lombok.Getter;
 
 import static contest.collectingbox.global.exception.ErrorCode.*;
@@ -11,15 +10,25 @@ public class GeoPoint {
     private final double longitude;
     private final double latitude;
 
-    public GeoPoint(double longitude, double latitude) {
+    public GeoPoint(Double longitude, Double latitude) {
+        validate(longitude, latitude);
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
+    private void validate(Double longitude, Double latitude) {
+        if (longitude == null) {
+            throw new CollectingBoxException(NOT_NULL_LONGITUDE);
+        }
+        if (latitude == null) {
+            throw new CollectingBoxException(NOT_NULL_LATITUDE);
+        }
         if (invalidLongitude(longitude)) {
             throw new CollectingBoxException(INVALID_LONGITUDE);
         }
         if (invalidLatitude(latitude)) {
             throw new CollectingBoxException(INVALID_LATITUDE);
         }
-        this.longitude = longitude;
-        this.latitude = latitude;
     }
 
     private boolean invalidLongitude(double longitude) {
