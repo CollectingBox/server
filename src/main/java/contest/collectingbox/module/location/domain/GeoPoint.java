@@ -24,10 +24,10 @@ public class GeoPoint {
             throw new CollectingBoxException(NOT_NULL_LATITUDE);
         }
         if (invalidLongitude(longitude)) {
-            throw new CollectingBoxException(INVALID_LONGITUDE);
+            throw new CollectingBoxException(OUT_OF_RANGE_LONGITUDE);
         }
         if (invalidLatitude(latitude)) {
-            throw new CollectingBoxException(INVALID_LATITUDE);
+            throw new CollectingBoxException(OUT_OF_RANGE_LATITUDE);
         }
     }
 
