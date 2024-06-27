@@ -1,18 +1,34 @@
 package contest.collectingbox.module.location.domain;
 
+import contest.collectingbox.global.exception.CollectingBoxException;
 import lombok.Getter;
+
+import static contest.collectingbox.global.exception.ErrorCode.*;
 
 @Getter
 public class GeoPoint {
     private final double longitude;
     private final double latitude;
 
-    public GeoPoint(double longitude, double latitude) {
-        if (invalidLongitude(longitude) || invalidLatitude(latitude)) {
-            throw new IllegalArgumentException("Invalid parameter value for longitude or latitude");
-        }
+    public GeoPoint(Double longitude, Double latitude) {
+        validate(longitude, latitude);
         this.longitude = longitude;
         this.latitude = latitude;
+    }
+
+    private void validate(Double longitude, Double latitude) {
+        if (longitude == null) {
+            throw new CollectingBoxException(NOT_NULL_LONGITUDE);
+        }
+        if (latitude == null) {
+            throw new CollectingBoxException(NOT_NULL_LATITUDE);
+        }
+        if (invalidLongitude(longitude)) {
+            throw new CollectingBoxException(OUT_OF_RANGE_LONGITUDE);
+        }
+        if (invalidLatitude(latitude)) {
+            throw new CollectingBoxException(OUT_OF_RANGE_LATITUDE);
+        }
     }
 
     private boolean invalidLongitude(double longitude) {

@@ -1,5 +1,6 @@
 package contest.collectingbox.module.location.domain;
 
+import contest.collectingbox.global.exception.CollectingBoxException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ class GeoPointTest {
     void fail_byLongitudeLessThanMin() {
         // when, then
         assertThatThrownBy(() -> new GeoPoint(-202.902174727201, 37.4871190365551))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(CollectingBoxException.class);
     }
 
     @Test
@@ -20,7 +21,7 @@ class GeoPointTest {
     void fail_byLongitudeGreaterThanMax() {
         // when, then
         assertThatThrownBy(() -> new GeoPoint(202.902174727201, 37.4871190365551))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(CollectingBoxException.class);
     }
 
     @Test
@@ -28,7 +29,7 @@ class GeoPointTest {
     void fail_byLatitudeLessThanMin() {
         // when, then
         assertThatThrownBy(() -> new GeoPoint(126.902174727201, -95.4871190365551))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(CollectingBoxException.class);
     }
 
     @Test
@@ -36,6 +37,6 @@ class GeoPointTest {
     void fail_byLatitudeGreaterThanMax() {
         // when, then
         assertThatThrownBy(() -> new GeoPoint(126.902174727201, 95.4871190365551))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(CollectingBoxException.class);
     }
 }

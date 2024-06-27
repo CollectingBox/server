@@ -12,7 +12,7 @@ class TagsTest {
 
     @Test
     @DisplayName("태그가 선택되지 않은 경우 실패한다.")
-    void fail_byNull() {
+    void fail_byTagsIsEmpty() {
         // when, then
         assertThatThrownBy(() -> new Tags(List.of()))
                 .isInstanceOf(CollectingBoxException.class);
