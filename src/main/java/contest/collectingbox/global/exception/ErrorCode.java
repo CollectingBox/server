@@ -16,6 +16,10 @@ public enum ErrorCode {
     INVALID_BEAN(BAD_REQUEST, "유효하지 않은 데이터입니다."),
     MISSING_REQUEST_PARAM(BAD_REQUEST, "필수 요청 파라미터가 존재하지 않습니다."),
     MISMATCH_REQUEST_PARAM(BAD_REQUEST, "요청 파라미터가 유효하지 않습니다."),
+    OUT_OF_RANGE_LONGITUDE(BAD_REQUEST, "경도는 -180 이상 180 이하의 값이어야 합니다."),
+    OUT_OF_RANGE_LATITUDE(BAD_REQUEST, "위도는 -90 이상 90 이하의 값이어야 합니다."),
+    NOT_NULL_LONGITUDE(BAD_REQUEST, "경도 값은 필수입니다."),
+    NOT_NULL_LATITUDE(BAD_REQUEST, "위도 값은 필수입니다."),
 
     // 404
     NOT_FOUND_COLLECTING_BOX(NOT_FOUND, "해당 수거함이 존재하지 않습니다."),

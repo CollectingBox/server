@@ -2,7 +2,7 @@ package contest.collectingbox.module.publicdata;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import contest.collectingbox.module.collectingbox.domain.CollectingBoxRepository;
+import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.location.domain.DongInfoRepository;
 import lombok.RequiredArgsConstructor;

@@ -18,24 +18,28 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CollectingBoxException.class)
     public ApiResponse<Object> handleCollectingBoxException(CollectingBoxException e) {
+        log.error(e.message());
         return ApiResponse.error(e.errorCode(), e.message());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiResponse<Object> methodValidException(MethodArgumentNotValidException e) {
+    public ApiResponse<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getFieldError().getDefaultMessage();
+        log.error(message);
         return ApiResponse.error(INVALID_BEAN, message);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ApiResponse<Object> handleMissingParams(MissingServletRequestParameterException e) {
+    public ApiResponse<Object> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+        log.error(e.getMessage());
         return ApiResponse.error(MISSING_REQUEST_PARAM, MISSING_REQUEST_PARAM.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ApiResponse<Object> handleMissingParams(MethodArgumentTypeMismatchException e) {
+    public ApiResponse<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        log.error(e.getMessage());
         return ApiResponse.error(MISMATCH_REQUEST_PARAM, MISSING_REQUEST_PARAM.getMessage());
     }
 }
