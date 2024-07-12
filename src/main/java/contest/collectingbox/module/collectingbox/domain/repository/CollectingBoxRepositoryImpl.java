@@ -1,5 +1,6 @@
 package contest.collectingbox.module.collectingbox.domain.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.spatial.locationtech.jts.JTSGeometryExpressions;
@@ -34,6 +35,7 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
     @Override
     public List<CollectingBoxResponse> findAllWithinArea(GeoPoint center, int radius, Tags tags) {
         Point centerPoint = GeometryUtil.toPoint(center.getLongitude(), center.getLatitude());
+
         return queryFactory
                 .select(new QCollectingBoxResponse(
                         collectingBox.id,
@@ -45,9 +47,16 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
                 ))
                 .from(collectingBox)
                 .join(collectingBox.location, location)
-                .where(JTSGeometryExpressions.asJTSGeometry(centerPoint).buffer(radius).contains(location.point),
-                        collectingBox.tag.in(tags.getTags()))
+                .where(withinArea(radius, centerPoint), collectingBox.tag.in(tags.getTags()))
                 .fetch();
+    }
+    
+    private BooleanExpression withinArea(int radius, Point centerPoint) {
+        return Expressions.booleanTemplate(
+                "st_contains(st_buffer({0}, {1}), {2})",
+                JTSGeometryExpressions.asJTSGeometry(centerPoint),
+                radius,
+                location.point);
     }
 
     @Override
