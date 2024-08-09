@@ -110,4 +110,25 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
                                 .where(dongInfo.sigunguNm.eq(query))))
                 .fetch();
     }
+
+    @Override
+    public List<CollectingBoxResponse> searchByDongNm(String query, Tags tags) {
+        return queryFactory
+                .select(new QCollectingBoxResponse(
+                        collectingBox.id,
+                        Expressions.stringTemplate("function('st_longitude', {0})", location.point)
+                                .castToNum(double.class),
+                        Expressions.stringTemplate("function('st_latitude', {0})", location.point)
+                                .castToNum(double.class),
+                        collectingBox.tag
+                ))
+                .from(collectingBox)
+                .join(collectingBox.location, location)
+                .where(location.dongInfo.dongCd.in(
+                        JPAExpressions
+                                .select(dongInfo.dongCd)
+                                .from(dongInfo)
+                                .where(dongInfo.dongNm.eq(query))))
+                .fetch();
+    }
 }

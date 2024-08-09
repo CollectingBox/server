@@ -1,20 +1,17 @@
 package contest.collectingbox.module.collectingbox.application;
 
-import contest.collectingbox.module.collectingbox.domain.CollectingBox;
 import contest.collectingbox.module.collectingbox.domain.Tags;
 import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
-import contest.collectingbox.module.location.domain.DongInfo;
-import contest.collectingbox.module.location.domain.repository.DongInfoRepository;
 import contest.collectingbox.module.location.domain.GeoPoint;
+import contest.collectingbox.module.location.domain.repository.DongInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,11 +55,7 @@ public class CollectingBoxService {
         return collectingBoxRepository.searchBySigunguNm(query, tags);
     }
 
-    private List<CollectingBoxResponse> searchByDongNm(String dongNm, Tags tags) {
-        DongInfo dongInfo = dongInfoRepository.findByDongNm(dongNm);
-        List<CollectingBox> boxes = collectingBoxRepository.findAllByDongInfoAndTags(dongInfo, tags.getTags());
-        return boxes.stream()
-                .map(CollectingBoxResponse::fromEntity)
-                .collect(Collectors.toList());
+    private List<CollectingBoxResponse> searchByDongNm(String query, Tags tags) {
+        return collectingBoxRepository.searchByDongNm(query, tags);
     }
 }
