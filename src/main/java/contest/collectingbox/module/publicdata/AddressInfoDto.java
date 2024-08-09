@@ -3,7 +3,7 @@ package contest.collectingbox.module.publicdata;
 import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
 import contest.collectingbox.module.collectingbox.domain.Tag;
-import contest.collectingbox.module.location.domain.DongInfoRepository;
+import contest.collectingbox.module.location.domain.repository.DongInfoRepository;
 import contest.collectingbox.module.location.domain.Location;
 import lombok.*;
 

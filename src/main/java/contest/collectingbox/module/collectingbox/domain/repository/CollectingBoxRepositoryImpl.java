@@ -2,6 +2,7 @@ package contest.collectingbox.module.collectingbox.domain.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.global.utils.GeometryUtil;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import static contest.collectingbox.global.exception.ErrorCode.NOT_FOUND_COLLECTING_BOX;
 import static contest.collectingbox.module.collectingbox.domain.QCollectingBox.collectingBox;
+import static contest.collectingbox.module.location.domain.QDongInfo.dongInfo;
 import static contest.collectingbox.module.location.domain.QLocation.location;
 import static contest.collectingbox.module.review.domain.QReview.review;
 
@@ -86,5 +88,47 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
         response.setReviews(reviews);
 
         return response;
+    }
+
+    @Override
+    public List<CollectingBoxResponse> searchBySigunguNm(String query, Tags tags) {
+        return queryFactory
+                .select(new QCollectingBoxResponse(
+                        collectingBox.id,
+                        Expressions.stringTemplate("function('st_longitude', {0})", location.point)
+                                .castToNum(double.class),
+                        Expressions.stringTemplate("function('st_latitude', {0})", location.point)
+                                .castToNum(double.class),
+                        collectingBox.tag
+                ))
+                .from(collectingBox)
+                .join(collectingBox.location, location)
+                .where(location.dongInfo.dongCd.in(
+                        JPAExpressions
+                                .select(dongInfo.dongCd)
+                                .from(dongInfo)
+                                .where(dongInfo.sigunguNm.eq(query))))
+                .fetch();
+    }
+
+    @Override
+    public List<CollectingBoxResponse> searchByDongNm(String query, Tags tags) {
+        return queryFactory
+                .select(new QCollectingBoxResponse(
+                        collectingBox.id,
+                        Expressions.stringTemplate("function('st_longitude', {0})", location.point)
+                                .castToNum(double.class),
+                        Expressions.stringTemplate("function('st_latitude', {0})", location.point)
+                                .castToNum(double.class),
+                        collectingBox.tag
+                ))
+                .from(collectingBox)
+                .join(collectingBox.location, location)
+                .where(location.dongInfo.dongCd.in(
+                        JPAExpressions
+                                .select(dongInfo.dongCd)
+                                .from(dongInfo)
+                                .where(dongInfo.dongNm.eq(query))))
+                .fetch();
     }
 }
