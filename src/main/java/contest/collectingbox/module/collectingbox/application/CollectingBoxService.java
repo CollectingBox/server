@@ -6,7 +6,7 @@ import contest.collectingbox.module.collectingbox.domain.repository.CollectingBo
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import contest.collectingbox.module.location.domain.DongInfo;
-import contest.collectingbox.module.location.domain.DongInfoRepository;
+import contest.collectingbox.module.location.domain.repository.DongInfoRepository;
 import contest.collectingbox.module.location.domain.GeoPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
