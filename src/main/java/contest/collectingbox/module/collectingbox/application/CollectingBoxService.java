@@ -55,11 +55,7 @@ public class CollectingBoxService {
     }
 
     private List<CollectingBoxResponse> searchBySigunguNm(String query, Tags tags) {
-        return dongInfoRepository.findAllBySigunguNm(query).stream()
-                .flatMap(dongInfo ->
-                        collectingBoxRepository.findAllByDongInfoAndTags(dongInfo, tags.getTags()).stream())
-                .map(CollectingBoxResponse::fromEntity)
-                .collect(Collectors.toList());
+        return collectingBoxRepository.searchBySigunguNm(query, tags);
     }
 
     private List<CollectingBoxResponse> searchByDongNm(String dongNm, Tags tags) {

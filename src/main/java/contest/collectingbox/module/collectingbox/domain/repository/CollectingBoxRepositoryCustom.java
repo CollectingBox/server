@@ -11,4 +11,6 @@ public interface CollectingBoxRepositoryCustom {
     CollectingBoxDetailResponse findDetailById(Long id);
 
     List<CollectingBoxResponse> findAllWithinArea(GeoPoint center, int radius, Tags tags);
+
+    List<CollectingBoxResponse> searchBySigunguNm(String query, Tags tags);
 }
