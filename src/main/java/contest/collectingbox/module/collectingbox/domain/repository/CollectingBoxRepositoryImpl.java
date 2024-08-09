@@ -3,7 +3,6 @@ package contest.collectingbox.module.collectingbox.domain.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.querydsl.spatial.locationtech.jts.JTSGeometryExpressions;
 import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.Tags;
@@ -50,11 +49,11 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
                 .where(withinArea(radius, centerPoint), collectingBox.tag.in(tags.getTags()))
                 .fetch();
     }
-    
+
     private BooleanExpression withinArea(int radius, Point centerPoint) {
         return Expressions.booleanTemplate(
                 "st_contains(st_buffer({0}, {1}), {2})",
-                JTSGeometryExpressions.asJTSGeometry(centerPoint),
+                centerPoint,
                 radius,
                 location.point);
     }
