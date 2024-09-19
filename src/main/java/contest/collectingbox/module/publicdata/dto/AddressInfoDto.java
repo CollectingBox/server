@@ -3,10 +3,9 @@ package contest.collectingbox.module.publicdata.dto;
 import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;
 import contest.collectingbox.module.collectingbox.domain.Tag;
-import contest.collectingbox.module.location.domain.repository.DongInfoRepository;
 import contest.collectingbox.module.location.domain.Location;
+import contest.collectingbox.module.location.domain.repository.DongInfoRepository;
 import lombok.*;
-
 
 @ToString
 @Getter
@@ -38,6 +37,10 @@ public class AddressInfoDto {
         return sido.isEmpty() || sigungu.isEmpty() || dong.isEmpty() ||
                 (name.isEmpty() && roadName.isEmpty() && streetNum.isEmpty())
                 || tag.name().isEmpty();
+    }
+
+    public boolean isSigunguEquals(String sigungu) {
+        return this.sigungu.equals(sigungu);
     }
 
     public CollectingBox toCollectingBox(DongInfoRepository repository) {
