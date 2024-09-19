@@ -5,7 +5,6 @@ import contest.collectingbox.module.collectingbox.domain.repository.CollectingBo
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxDetailResponse;
 import contest.collectingbox.module.collectingbox.dto.CollectingBoxResponse;
 import contest.collectingbox.module.location.domain.GeoPoint;
-import contest.collectingbox.module.location.domain.repository.DongInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ import java.util.List;
 public class CollectingBoxService {
 
     private final CollectingBoxRepository collectingBoxRepository;
-    private final DongInfoRepository dongInfoRepository;
 
     @Value("${collecting-box.search.radius.meter}")
     private int radius;
