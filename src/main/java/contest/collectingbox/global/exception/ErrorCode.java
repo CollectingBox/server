@@ -27,7 +27,8 @@ public enum ErrorCode {
     NOT_FOUND_TAG(NOT_FOUND, "해당 이름과 일치하는 수거함 태그가 없습니다."),
 
     // 500
-    UNEXPECTED_ERROR_EXTERNAL_API(INTERNAL_SERVER_ERROR, "외부 API 호출 시 알 수 없는 예외가 발생했습니다.");
+    UNEXPECTED_ERROR_EXTERNAL_API(INTERNAL_SERVER_ERROR, "외부 API 호출 시 알 수 없는 예외가 발생했습니다."),
+    ERROR_PARSING_JSON_KAKAO_API(INTERNAL_SERVER_ERROR, "Error parsing JSON from Kakao API");
 
     private final HttpStatus httpStatus;
     private final String message;

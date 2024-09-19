@@ -6,11 +6,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.json.JSONObject;
 
-import static contest.collectingbox.module.publicdata.dto.AddressInfoDto.*;
+import static contest.collectingbox.module.publicdata.dto.AddressInfoDto.AddressInfoDtoBuilder;
+import static contest.collectingbox.module.publicdata.dto.AddressInfoDto.builder;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AddressInfoMapper {
-    public static AddressInfoDto jsonObjectToAddressInfoDto(JSONObject document, Tag tag) {
+    public static AddressInfoDto fromJsonObjectAndTag(JSONObject document, Tag tag) {
         JSONObject address = document.getJSONObject("address");
         JSONObject roadAddress = document.getJSONObject("road_address");
 
