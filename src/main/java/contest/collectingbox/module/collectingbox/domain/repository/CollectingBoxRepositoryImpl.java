@@ -103,11 +103,12 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
                 ))
                 .from(collectingBox)
                 .join(collectingBox.location, location)
-                .where(location.dongInfo.dongCd.in(
-                        JPAExpressions
-                                .select(dongInfo.dongCd)
-                                .from(dongInfo)
-                                .where(dongInfo.sigunguNm.eq(query))))
+                .where(collectingBox.tag.in(tags.getTags()),
+                        location.dongInfo.dongCd.in(
+                                JPAExpressions
+                                        .select(dongInfo.dongCd)
+                                        .from(dongInfo)
+                                        .where(dongInfo.sigunguNm.eq(query))))
                 .fetch();
     }
 
@@ -124,11 +125,12 @@ public class CollectingBoxRepositoryImpl implements CollectingBoxRepositoryCusto
                 ))
                 .from(collectingBox)
                 .join(collectingBox.location, location)
-                .where(location.dongInfo.dongCd.in(
-                        JPAExpressions
-                                .select(dongInfo.dongCd)
-                                .from(dongInfo)
-                                .where(dongInfo.dongNm.eq(query))))
+                .where(collectingBox.tag.in(tags.getTags()), 
+                        location.dongInfo.dongCd.in(
+                                JPAExpressions
+                                        .select(dongInfo.dongCd)
+                                        .from(dongInfo)
+                                        .where(dongInfo.dongNm.eq(query))))
                 .fetch();
     }
 }
