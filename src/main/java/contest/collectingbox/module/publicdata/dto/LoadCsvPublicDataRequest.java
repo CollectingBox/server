@@ -1,4 +1,4 @@
-package contest.collectingbox.module.publicdata;
+package contest.collectingbox.module.publicdata.dto;
 
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import lombok.Getter;

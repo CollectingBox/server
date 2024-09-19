@@ -1,6 +1,7 @@
-package contest.collectingbox.module.publicdata;
+package contest.collectingbox.module.publicdata.dto;
 
 import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.publicdata.domain.PublicDataApiInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

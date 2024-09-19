@@ -1,15 +1,21 @@
-package contest.collectingbox.module.publicdata;
+package contest.collectingbox.module.publicdata.application;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
 import contest.collectingbox.module.location.domain.repository.DongInfoRepository;
+import contest.collectingbox.module.publicdata.domain.*;
+import contest.collectingbox.module.publicdata.dto.AddressInfoDto;
+import contest.collectingbox.module.publicdata.dto.LoadCsvPublicDataRequest;
+import contest.collectingbox.module.publicdata.dto.LoadPublicDataRequest;
+import contest.collectingbox.module.publicdata.dto.SavePublicDataApiInfoRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,59 +30,62 @@ import java.util.Set;
 public class PublicDataService {
 
     private static final String CSV_FILE_PATH = "csv/";
+
     private final PublicDataApiInfoRepository publicDataApiInfoRepository;
+    private final OpenDataApiManager openDataApiManager;
     private final PublicDataExtract publicDataExtract;
     private final KakaoApiManager kakaoApiManager;
     private final CollectingBoxRepository collectingBoxRepository;
     private final DongInfoRepository dongInfoRepository;
 
+    @Transactional
     public void savePublicDataApiInfo(List<SavePublicDataApiInfoRequest> requests) {
-        for (SavePublicDataApiInfoRequest request : requests) {
-            publicDataApiInfoRepository.save(request.toEntity());
-        }
+        publicDataApiInfoRepository.saveAll(getEntities(requests));
     }
 
-    public long loadPublicData(JSONObject jsonObject, String sigungu, Tag tag) {
+    private List<PublicDataApiInfo> getEntities(List<SavePublicDataApiInfoRequest> requests) {
+        return requests.stream()
+                .map(SavePublicDataApiInfoRequest::toEntity)
+                .toList();
+    }
+
+    @Transactional
+    public long loadPublicData(List<LoadPublicDataRequest> requests) {
         long loadedDataCount = 0;
-        JSONArray jsonArray = (JSONArray) jsonObject.get("data");
+        for (LoadPublicDataRequest request : requests) {
+            log.info("======= {} - {} =======", request.getSigungu(), request.getTag().getLabel());
 
-        Set<String> querySet = new HashSet<>();
-        for (Object o : jsonArray) {
-            JSONObject object = (JSONObject) o;
-            querySet.add(publicDataExtract.extractQuery(object, sigungu, tag));
-        }
+            String sigungu = request.getSigungu();
+            Tag tag = request.getTag();
 
-        for (String query : querySet) {
-            // 검색 키워드 null 체크
-            if (query == null) {
-                continue;
+            int totalCount = openDataApiManager.fetchTotalCount(request.getCallAddress());
+            JSONArray jsonArray = openDataApiManager.fetchOpenData(request.getCallAddress(), totalCount);
+
+            Set<String> querySet = new HashSet<>();
+            for (Object o : jsonArray) {
+                publicDataExtract.extractQuery((JSONObject) o, sigungu, tag)
+                        .ifPresent(querySet::add);
             }
 
-            // 카카오 주소 검색 API 호출
-            AddressInfoDto addressInfo = kakaoApiManager.fetchAddressInfo(query, tag);
+            for (String query : querySet) {
+                // 카카오 주소 검색 API 호출
+                AddressInfoDto addressInfo = kakaoApiManager.fetchAddressInfo(query, tag);
 
-            // 카카오 주소 검색 API 응답 null 체크
-            if (addressInfo == null) {
-                continue;
-            }
+                // 카카오 주소 검색 API 응답 출력
+                log.info("query = {}, response = {}", query, addressInfo);
 
-            if (addressInfo.hasNull()) {
-                throw new RuntimeException("kakao API response has null");
-            }
-
-            // 카카오 주소 검색 API 응답 출력
-            log.info("query = {}, response = {}", query, addressInfo);
-
-            // insert DB
-            if (equals(addressInfo.getSigungu(), sigungu)) {
-                loadedDataCount++;
-                collectingBoxRepository.save(addressInfo.toCollectingBox(dongInfoRepository));
+                // insert DB
+                if (addressInfo != null && addressInfo.isSigunguEquals(sigungu)) {
+                    collectingBoxRepository.save(addressInfo.toCollectingBox(dongInfoRepository));
+                    loadedDataCount++;
+                }
             }
         }
 
         return loadedDataCount;
     }
 
+    @Transactional
     public long loadCsvPublicData(LoadCsvPublicDataRequest request) {
         String fileName = CSV_FILE_PATH + request.getFileName();
         try {

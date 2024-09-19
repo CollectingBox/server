@@ -1,4 +1,4 @@
-package contest.collectingbox.module.publicdata;
+package contest.collectingbox.module.publicdata.domain;
 
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import jakarta.persistence.*;
