@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -37,6 +38,7 @@ public class PublicDataService {
     private final CollectingBoxRepository collectingBoxRepository;
     private final DongInfoRepository dongInfoRepository;
 
+    @Transactional
     public void savePublicDataApiInfo(List<SavePublicDataApiInfoRequest> requests) {
         publicDataApiInfoRepository.saveAll(getEntities(requests));
     }
@@ -47,6 +49,7 @@ public class PublicDataService {
                 .toList();
     }
 
+    @Transactional
     public long loadPublicData(JSONObject jsonObject, String sigungu, Tag tag) {
         long loadedDataCount = 0;
         JSONArray jsonArray = (JSONArray) jsonObject.get("data");
@@ -88,6 +91,7 @@ public class PublicDataService {
         return loadedDataCount;
     }
 
+    @Transactional
     public long loadCsvPublicData(LoadCsvPublicDataRequest request) {
         String fileName = CSV_FILE_PATH + request.getFileName();
         try {
