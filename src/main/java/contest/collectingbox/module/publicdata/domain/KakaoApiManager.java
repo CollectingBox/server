@@ -1,6 +1,7 @@
-package contest.collectingbox.module.publicdata;
+package contest.collectingbox.module.publicdata.domain;
 
 import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.publicdata.dto.AddressInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;

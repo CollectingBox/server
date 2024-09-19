@@ -1,10 +1,16 @@
-package contest.collectingbox.module.publicdata;
+package contest.collectingbox.module.publicdata.application;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.location.domain.repository.DongInfoRepository;
+import contest.collectingbox.module.publicdata.domain.KakaoApiManager;
+import contest.collectingbox.module.publicdata.domain.PublicDataApiInfoRepository;
+import contest.collectingbox.module.publicdata.domain.PublicDataExtract;
+import contest.collectingbox.module.publicdata.dto.AddressInfoDto;
+import contest.collectingbox.module.publicdata.dto.LoadCsvPublicDataRequest;
+import contest.collectingbox.module.publicdata.dto.SavePublicDataApiInfoRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;

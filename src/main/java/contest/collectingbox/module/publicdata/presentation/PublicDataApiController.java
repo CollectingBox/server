@@ -1,6 +1,10 @@
-package contest.collectingbox.module.publicdata;
+package contest.collectingbox.module.publicdata.presentation;
 
 import contest.collectingbox.global.common.ApiResponse;
+import contest.collectingbox.module.publicdata.application.PublicDataService;
+import contest.collectingbox.module.publicdata.dto.LoadCsvPublicDataRequest;
+import contest.collectingbox.module.publicdata.dto.LoadPublicDataRequest;
+import contest.collectingbox.module.publicdata.dto.SavePublicDataApiInfoRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -41,7 +45,7 @@ public class PublicDataApiController {
         long loadedDataCount = 0;
         for (LoadPublicDataRequest request : requests) {
             try {
-                System.out.printf("======= %s - %s =======%n", request.getSigungu(), request.getTag().getLabel());
+                log.info("======= {} - {} =======%n", request.getSigungu(), request.getTag().getLabel());
                 int totalCount = getTotalCountOfPublicData(request);
                 loadedDataCount += publicDataService.loadPublicData(callPublicDataApi(request, totalCount),
                         request.getSigungu(),

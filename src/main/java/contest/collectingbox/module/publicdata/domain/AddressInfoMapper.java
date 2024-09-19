@@ -1,11 +1,12 @@
-package contest.collectingbox.module.publicdata;
+package contest.collectingbox.module.publicdata.domain;
 
 import contest.collectingbox.module.collectingbox.domain.Tag;
+import contest.collectingbox.module.publicdata.dto.AddressInfoDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.json.JSONObject;
 
-import static contest.collectingbox.module.publicdata.AddressInfoDto.*;
+import static contest.collectingbox.module.publicdata.dto.AddressInfoDto.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AddressInfoMapper {

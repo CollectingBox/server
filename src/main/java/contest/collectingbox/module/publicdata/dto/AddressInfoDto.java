@@ -1,4 +1,4 @@
-package contest.collectingbox.module.publicdata;
+package contest.collectingbox.module.publicdata.dto;
 
 import contest.collectingbox.global.utils.GeometryUtil;
 import contest.collectingbox.module.collectingbox.domain.CollectingBox;

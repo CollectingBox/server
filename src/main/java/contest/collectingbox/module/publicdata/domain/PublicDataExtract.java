@@ -1,4 +1,4 @@
-package contest.collectingbox.module.publicdata;
+package contest.collectingbox.module.publicdata.domain;
 
 import static contest.collectingbox.module.collectingbox.domain.Tag.*;
 
