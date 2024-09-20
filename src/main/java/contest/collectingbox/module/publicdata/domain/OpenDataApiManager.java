@@ -7,13 +7,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 import static contest.collectingbox.global.exception.ErrorCode.UNEXPECTED_ERROR_EXTERNAL_API;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Component
 public class OpenDataApiManager {
 
-    private static final String API_URL = "https://api.odcloud.kr/api%s?serviceKey=%s&perPage=%d";
+    private static final String API_URL = "https://api.odcloud.kr/api%s";
 
     @Value("${public-data.api.key}")
     private String apiKey;
@@ -36,8 +40,11 @@ public class OpenDataApiManager {
         return new JSONObject(response.getBody()).getJSONArray("data");
     }
 
-    private String getUrl(String callAddress, int perPage) {
-        return String.format(API_URL, callAddress, apiKey, perPage);
+    private URI getUrl(String callAddress, int perPage) {
+        return UriComponentsBuilder.fromUriString(String.format(API_URL, callAddress))
+                .queryParam("serviceKey", apiKey)
+                .queryParam("perPage", perPage)
+                .build().encode(UTF_8).toUri();
     }
 
     private boolean isError(ResponseEntity<String> response) {
