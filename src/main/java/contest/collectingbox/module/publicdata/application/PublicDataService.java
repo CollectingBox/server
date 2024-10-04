@@ -2,6 +2,7 @@ package contest.collectingbox.module.publicdata.application;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import contest.collectingbox.module.collectingbox.domain.CollectingBox;
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.collectingbox.domain.repository.CollectingBoxRepository;
 import contest.collectingbox.module.location.domain.repository.DongInfoRepository;
@@ -19,10 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -51,7 +49,7 @@ public class PublicDataService {
 
     @Transactional
     public long loadPublicData(List<LoadPublicDataRequest> requests) {
-        long loadedDataCount = 0;
+        List<CollectingBox> boxes = new ArrayList<>();
         for (LoadPublicDataRequest request : requests) {
             log.info("======= {} - {} =======", request.getSigungu(), request.getTag().getLabel());
 
@@ -74,15 +72,17 @@ public class PublicDataService {
                 // 카카오 주소 검색 API 응답 출력
                 log.info("query = {}, response = {}", query, addressInfo);
 
-                // insert DB
+                // 수거함 객체 저장
                 if (addressInfo != null && addressInfo.isSigunguEquals(sigungu)) {
-                    collectingBoxRepository.save(addressInfo.toCollectingBox(dongInfoRepository));
-                    loadedDataCount++;
+                    boxes.add(addressInfo.toCollectingBox(dongInfoRepository));
                 }
             }
         }
 
-        return loadedDataCount;
+        // bulk insert
+        collectingBoxRepository.saveAll(boxes);
+
+        return boxes.size();
     }
 
     @Transactional

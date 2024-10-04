@@ -10,7 +10,7 @@ import static contest.collectingbox.module.publicdata.dto.AddressInfoDto.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AddressInfoMapper {
-    public static AddressInfoDto jsonObjectToAddressInfoDto(JSONObject document, Tag tag) {
+    public static AddressInfoDto mapToAddressInfo(JSONObject document, Tag tag) {
         JSONObject address = document.getJSONObject("address");
         JSONObject roadAddress = document.getJSONObject("road_address");
 

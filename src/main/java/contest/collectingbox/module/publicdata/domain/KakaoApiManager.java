@@ -1,5 +1,6 @@
 package contest.collectingbox.module.publicdata.domain;
 
+import contest.collectingbox.global.exception.CollectingBoxException;
 import contest.collectingbox.module.collectingbox.domain.Tag;
 import contest.collectingbox.module.publicdata.dto.AddressInfoDto;
 import lombok.RequiredArgsConstructor;
@@ -8,13 +9,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
+import static contest.collectingbox.global.exception.ErrorCode.ERROR_PARSING_JSON_KAKAO_API;
+import static contest.collectingbox.global.exception.ErrorCode.UNEXPECTED_ERROR_EXTERNAL_API;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Component
@@ -31,8 +37,8 @@ public class KakaoApiManager {
             ResponseEntity<String> response = callKakaoAPI(query);
 
             // 카카오 API 예외 처리
-            if (response.getStatusCode() != HttpStatus.OK) {
-                throw new RuntimeException("Kakao API failed status = " + response.getStatusCode());
+            if (response.getStatusCode().isError()) {
+                throw new CollectingBoxException(UNEXPECTED_ERROR_EXTERNAL_API);
             }
 
             // 주소 정보 추출
@@ -49,16 +55,16 @@ public class KakaoApiManager {
                 return null;
             }
 
-            return AddressInfoMapper.jsonObjectToAddressInfoDto(document, tag);
+            return AddressInfoMapper.mapToAddressInfo(document, tag);
         } catch (JSONException e) {
-            throw new RuntimeException("Error parsing JSON from Kakao API", e);
+            throw new CollectingBoxException(ERROR_PARSING_JSON_KAKAO_API);
         }
     }
 
     private ResponseEntity<String> callKakaoAPI(String query) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("Authorization", "KakaoAK " + apiKey);
+        httpHeaders.set("Authorization", "KakaoAK %s".formatted(apiKey));
         HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
         URI targetUrl = UriComponentsBuilder.fromUriString(API_URL).queryParam("query", query)
                 .build().encode(UTF_8).toUri();
